@@ -1,0 +1,14 @@
+En ole saanut oikein mitaan aikaiseksi, vaikea tentti ensi maanantaina,
+joten koko viikonloppu menee lukiessa. Lahinna olen vain pyoritellyt
+ideoita, luonut gitin ja kirjoittanut taman tekstinpatkan. Koko projekti
+lahtee liikkeelle oikeastaan vasta ensi tiistaina, kun vihdoinkin on
+tentit takanapain. Aion tutustua eri 3D-moottoreihin ja tutkia,
+minkalaisia tietorakenteita ja algoritmeja niista loytyy. Jokin kirja
+aiheesta taytyy myos hankkia ja lueskella netista materiaaleja.
+Tavoitteena on saada ensi viikolla koodattuakin jotain. Kielen saan
+paatettya, kunhan tiedan mita tulen koodaamaan. Halu vaantaa C:ta on
+kova, mut jos aihe osoittautuu liian vaikeaksi pidattaydyn
+tutussa ja turvallisessa javassa. 3D-moottorin rakentamisessa
+kannattaisi varmaan kayttaa C++:ssaa, jota en viela osaa, mutta sen
+opetteleminen tuskin on mikaan este. Ensi viikkoraportin kirjoitan
+kylla jollain muulla kuin nano:lla etayhteytta kayttaen...
