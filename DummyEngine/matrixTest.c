@@ -25,9 +25,16 @@ void matrixTest() {
     
     printMatrix(E);
     
+    matrix* vector = newMatrix(3, 1);
+    
+    matrixFill(vector, 1.9);
+    
+    printMatrix(vector);
+    
     deleteMatrix(A);
     deleteMatrix(B);
     deleteMatrix(C);
     deleteMatrix(D);
     deleteMatrix(E);
+    deleteMatrix(vector);
 }

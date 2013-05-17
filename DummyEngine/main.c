@@ -15,6 +15,8 @@ int main(int argc, char** argv) {
     
     matrixTest();
     
+    meshTest();
+    
     return (EXIT_SUCCESS);
 }
 

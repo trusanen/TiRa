@@ -16,7 +16,7 @@ matrix* newMatrix(int rows, int columns) {
     
     int j = 0;
     
-    for(j ; j < columns ; j++) {
+    for(j ; j < rows ; j++) {
         A->values[j] = malloc(sizeof(float) * columns);
     }
     
