@@ -53,6 +53,21 @@ void printMatrix(matrix* A) {
     printf("\n");
 }
 
+void matrixFill(matrix* A, float value) {
+    
+    assert(A != NULL);
+    
+    int i = 0;
+    int j = 0;
+    
+    for(i ; i < A->rows ; i++) {
+        for(j ; j < A->columns; j++) {
+            A->values[i][j] = value;
+        }
+        j = 0;
+    }
+}
+
 matrix* matrixSum(matrix* A, matrix* B) {
     
     assert(A->rows == B->rows && A->columns == B->columns);

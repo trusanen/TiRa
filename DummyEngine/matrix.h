@@ -17,6 +17,8 @@ typedef struct {
 matrix* newMatrix(int rows, int columns);
 void deleteMatrix(matrix* A);
 void printMatrix(matrix* A);
+void matrixFill(matrix* A, float value);
+matrix* matrixSum(matrix* A, matrix* B);
 matrix* matrixMultiply(matrix* A, matrix* B);
 
 #ifdef	__cplusplus

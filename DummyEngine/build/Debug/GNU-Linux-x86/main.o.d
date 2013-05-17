@@ -1,3 +1,1 @@
-build/Debug/GNU-Linux-x86/main.o: main.c matrix.h
-
-matrix.h:
+build/Debug/GNU-Linux-x86/main.o: main.c
