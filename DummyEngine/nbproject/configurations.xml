@@ -16,6 +16,9 @@
       <itemPath>main.c</itemPath>
       <itemPath>matrix.c</itemPath>
       <itemPath>matrixTest.c</itemPath>
+      <itemPath>mesh.c</itemPath>
+      <itemPath>mesh.h</itemPath>
+      <itemPath>meshTest.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

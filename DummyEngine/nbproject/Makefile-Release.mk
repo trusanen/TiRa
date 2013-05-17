@@ -34,7 +34,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/meshTest.o \
 	${OBJECTDIR}/matrixTest.o \
+	${OBJECTDIR}/mesh.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/matrix.o
 
@@ -63,10 +65,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
+${OBJECTDIR}/meshTest.o: meshTest.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/meshTest.o meshTest.c
+
 ${OBJECTDIR}/matrixTest.o: matrixTest.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/matrixTest.o matrixTest.c
+
+${OBJECTDIR}/mesh.o: mesh.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/mesh.o mesh.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
