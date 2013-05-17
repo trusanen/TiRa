@@ -40,6 +40,11 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <compileType>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerOptionItem>-lSDL</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
       <folder path="TestFiles/f1">
         <cTool>
