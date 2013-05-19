@@ -34,11 +34,13 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/meshTest.o \
-	${OBJECTDIR}/matrixTest.o \
-	${OBJECTDIR}/mesh.o \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/matrix.o
+	${OBJECTDIR}/_ext/73483906/meshTest.o \
+	${OBJECTDIR}/_ext/73483906/main.o \
+	${OBJECTDIR}/_ext/73483906/matrix.o \
+	${OBJECTDIR}/_ext/73483906/matrixTest.o \
+	${OBJECTDIR}/_ext/73483906/mesh.o \
+	${OBJECTDIR}/_ext/73483906/draw.o \
+	${OBJECTDIR}/_ext/73483906/sdltest.o
 
 
 # C Compiler Flags
@@ -65,30 +67,40 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/meshTest.o: meshTest.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/73483906/meshTest.o: /home/topias/TiRa/TiRa/DummyEngine/meshTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/meshTest.o meshTest.c
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/meshTest.o /home/topias/TiRa/TiRa/DummyEngine/meshTest.c
 
-${OBJECTDIR}/matrixTest.o: matrixTest.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/73483906/main.o: /home/topias/TiRa/TiRa/DummyEngine/main.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/matrixTest.o matrixTest.c
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/main.o /home/topias/TiRa/TiRa/DummyEngine/main.c
 
-${OBJECTDIR}/mesh.o: mesh.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/73483906/matrix.o: /home/topias/TiRa/TiRa/DummyEngine/matrix.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/mesh.o mesh.c
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/matrix.o /home/topias/TiRa/TiRa/DummyEngine/matrix.c
 
-${OBJECTDIR}/main.o: main.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/73483906/matrixTest.o: /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/matrixTest.o /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c
 
-${OBJECTDIR}/matrix.o: matrix.c 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/73483906/mesh.o: /home/topias/TiRa/TiRa/DummyEngine/mesh.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/matrix.o matrix.c
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/mesh.o /home/topias/TiRa/TiRa/DummyEngine/mesh.c
+
+${OBJECTDIR}/_ext/73483906/draw.o: /home/topias/TiRa/TiRa/DummyEngine/draw.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/draw.o /home/topias/TiRa/TiRa/DummyEngine/draw.c
+
+${OBJECTDIR}/_ext/73483906/sdltest.o: /home/topias/TiRa/TiRa/DummyEngine/sdltest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/sdltest.o /home/topias/TiRa/TiRa/DummyEngine/sdltest.c
 
 # Subprojects
 .build-subprojects:
