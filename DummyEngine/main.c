@@ -7,17 +7,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 /*
  * 
  */
 int main(int argc, char** argv) {
     
-    matrixTest();
-    
-    meshTest();
-    
-    sdlTest();
+    runTests();
     
     return (EXIT_SUCCESS);
 }

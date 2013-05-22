@@ -12,7 +12,8 @@
 #include "mesh.h"
 
 Uint32 getPixel(SDL_Surface* surface, int x, int y);
-void putPixel(SDL_Surface* surface, int x, int y, Uint32 p);
+void putPixel(SDL_Surface* surface, int x, int y, Uint32 color);
+void drawLine(SDL_Surface* surface, int startX, int startY, int endX, int endY, Uint32 color);
 void drawPolygon(SDL_Surface* surface, polygon* P);
 
 #ifdef	__cplusplus

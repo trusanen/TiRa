@@ -34,10 +34,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/_ext/73483906/testMain.o \
 	${OBJECTDIR}/_ext/73483906/meshTest.o \
 	${OBJECTDIR}/_ext/73483906/main.o \
 	${OBJECTDIR}/_ext/73483906/matrix.o \
 	${OBJECTDIR}/_ext/73483906/matrixTest.o \
+	${OBJECTDIR}/_ext/73483906/codeSnippets.o \
 	${OBJECTDIR}/_ext/73483906/mesh.o \
 	${OBJECTDIR}/_ext/73483906/draw.o \
 	${OBJECTDIR}/_ext/73483906/sdltest.o
@@ -67,6 +69,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
+${OBJECTDIR}/_ext/73483906/testMain.o: /home/topias/TiRa/TiRa/DummyEngine/testMain.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/testMain.o /home/topias/TiRa/TiRa/DummyEngine/testMain.c
+
 ${OBJECTDIR}/_ext/73483906/meshTest.o: /home/topias/TiRa/TiRa/DummyEngine/meshTest.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
@@ -86,6 +93,11 @@ ${OBJECTDIR}/_ext/73483906/matrixTest.o: /home/topias/TiRa/TiRa/DummyEngine/matr
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/matrixTest.o /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c
+
+${OBJECTDIR}/_ext/73483906/codeSnippets.o: /home/topias/TiRa/TiRa/DummyEngine/codeSnippets.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/codeSnippets.o /home/topias/TiRa/TiRa/DummyEngine/codeSnippets.c
 
 ${OBJECTDIR}/_ext/73483906/mesh.o: /home/topias/TiRa/TiRa/DummyEngine/mesh.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906

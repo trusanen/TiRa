@@ -31,10 +31,24 @@ void matrixTest() {
     
     printMatrix(vector);
     
+    matrix* vectorTranspose = matrixTranspose(vector);
+    
+    printMatrix(vectorTranspose);
+    
+    matrix* F = newMatrix(7, 7);
+    matrixFill(F, 7.0);
+    
+    matrix* scalarMultiplyResult = matrixMultiplyScalar(F, 0.5);
+    
+    printMatrix(scalarMultiplyResult);
+    
     deleteMatrix(A);
     deleteMatrix(B);
     deleteMatrix(C);
     deleteMatrix(D);
     deleteMatrix(E);
     deleteMatrix(vector);
+    deleteMatrix(vectorTranspose);
+    deleteMatrix(F);
+    deleteMatrix(scalarMultiplyResult);
 }

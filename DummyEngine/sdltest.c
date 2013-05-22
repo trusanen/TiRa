@@ -23,6 +23,8 @@ sdlTest() {
         j = 0;
     }
     
+    
+    
     SDL_Flip(screen);
     
     SDL_Delay(2000);

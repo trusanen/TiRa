@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include "matrix.h"
 
 void meshTest() {
     
@@ -11,6 +12,10 @@ void meshTest() {
     mesh* M = newMesh();
     
     addPolygon(M, P);
+    
+    meshTranslate(M, 1.0, 2.0, 3.0);
+    
+    printMatrix(M->coords);
     
     deleteMesh(M);
     

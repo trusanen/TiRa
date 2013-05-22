@@ -20,6 +20,8 @@ typedef struct polygon_t {
 } polygon;
 
 typedef struct {
+    matrix* coords;
+    matrix* rotation;
     polygon* polygons;
 } mesh;
 
@@ -32,6 +34,10 @@ void deletePolygon(polygon* P);
 mesh* newMesh();
 void deleteMesh(mesh* M);
 void addPolygon(mesh*M, polygon* P);
+
+void meshScale(mesh* M, float x, float y, float z);
+void meshRotate(mesh* M, float xRotation, float yRotation, float zRotation);
+void meshTranslate(mesh* M, float x, float y, float z);
 
 #ifdef	__cplusplus
 extern "C" {
