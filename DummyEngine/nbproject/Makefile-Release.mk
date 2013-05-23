@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/73483906/meshTest.o \
 	${OBJECTDIR}/_ext/73483906/main.o \
 	${OBJECTDIR}/_ext/73483906/matrix.o \
+	${OBJECTDIR}/_ext/73483906/renderTest.o \
 	${OBJECTDIR}/_ext/73483906/matrixTest.o \
 	${OBJECTDIR}/_ext/73483906/codeSnippets.o \
 	${OBJECTDIR}/_ext/73483906/mesh.o \
@@ -88,6 +89,11 @@ ${OBJECTDIR}/_ext/73483906/matrix.o: /home/topias/TiRa/TiRa/DummyEngine/matrix.c
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/matrix.o /home/topias/TiRa/TiRa/DummyEngine/matrix.c
+
+${OBJECTDIR}/_ext/73483906/renderTest.o: /home/topias/TiRa/TiRa/DummyEngine/renderTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/renderTest.o /home/topias/TiRa/TiRa/DummyEngine/renderTest.c
 
 ${OBJECTDIR}/_ext/73483906/matrixTest.o: /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906

@@ -4,4 +4,6 @@ void runTests() {
     meshTest();
     
     sdlTest();
+    
+    renderTest();
 }

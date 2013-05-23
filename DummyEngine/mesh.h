@@ -9,6 +9,7 @@
 #define	MESH_H
 
 #include "matrix.h"
+#include "SDL/SDL.h"
 
 typedef struct {
     matrix* coords;
@@ -16,6 +17,7 @@ typedef struct {
 
 typedef struct polygon_t {
     vertex* verts[3];
+    Uint32 color;
     struct polygon_t* next;
 } polygon;
 
@@ -28,8 +30,9 @@ typedef struct {
 vertex* newVertex(float x, float y, float z);
 void deleteVertex(vertex* V);
 
-polygon* newPolygon();
+polygon* newPolygon(vertex* A, vertex* B, vertex* C);
 void deletePolygon(polygon* P);
+void setPolygonColor(polygon* P, Uint32 color);
 
 mesh* newMesh();
 void deleteMesh(mesh* M);

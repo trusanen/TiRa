@@ -65,8 +65,14 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
         if(steep) {
             putPixel(surface, y, x, color);
         }
-        
-        // KESKEN VIIMEISTELE!!!
+        else {
+            putPixel(surface, x, y, color);
+        }
+        error = error - deltay;
+        if(error < 0) {
+            y = y + ystep;
+            error = error + deltax;
+        }
     }
 }
 

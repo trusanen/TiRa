@@ -23,7 +23,7 @@ sdlTest() {
         j = 0;
     }
     
-    
+    drawLine(screen, 10.5, 9.99, 49.99, 200.001, pixel);
     
     SDL_Flip(screen);
     

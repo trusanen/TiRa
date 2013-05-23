@@ -30,6 +30,8 @@ matrix* newMatrix(int rows, int columns) {
         A->values[j] = malloc(sizeof(float) * columns);
     }
     
+    matrixFill(A, 0);
+    
     return A;
 }
 
@@ -42,7 +44,7 @@ void deleteMatrix(matrix* A) {
     
     int j = 0;
     
-    for(j ; j < A->columns ; j++) {
+    for(j ; j < A->rows ; j++) {
         free(A->values[j]);
     }
     free(A->values);

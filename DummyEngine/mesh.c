@@ -27,11 +27,12 @@ vertex* newVertex(float x, float y, float z) {
     
     vertex* V = malloc(sizeof(vertex));
     
-    V->coords = newMatrix(3, 1);
+    V->coords = newMatrix(4, 1);
     
     V->coords->values[0][0] = x;
     V->coords->values[1][0] = y;
     V->coords->values[2][0] = z;
+    V->coords->values[3][0] = 1;
     
     return V;
 }
@@ -76,6 +77,20 @@ void deletePolygon(polygon* P) {
     deleteVertex(P->verts[2]);
     
     free(P);
+}
+
+void setPolygonColor(polygon* P, Uint32 color) {
+    
+    // Asettaa polygonin värin, color-argumentti jakautuu neljään
+    // kahdeksan bitin osaan, jotka kuvaavat punaisen, vihreän,
+    // sinisen ja alpha-kanavan astetta.
+    
+    // Tarkistaa, että annettu polygoni ei ole tyhjä.
+    
+    assert(P != NULL);
+    
+    P->color = color;
+    
 }
 
 mesh* newMesh() {
