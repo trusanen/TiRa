@@ -19,7 +19,7 @@ void deleteMatrix(matrix* A);
 void printMatrix(matrix* A);
 matrix* identityMatrix(int dim);
 void matrixFill(matrix* A, float value);
-matrix* matrixMultiplyScalar(matrix* A, float scalar);
+void matrixMultiplyScalar(matrix* A, float scalar);
 matrix* matrixSum(matrix* A, matrix* B);
 matrix* matrixMultiply(matrix* A, matrix* B);
 matrix* matrixTranspose(matrix* A);

@@ -116,26 +116,22 @@ void matrixFill(matrix* A, float value) {
     }
 }
 
-matrix* matrixMultiplyScalar(matrix* A, float scalar) {
+void matrixMultiplyScalar(matrix* A, float scalar) {
     
     // Kertoo kaikkia matriisin alkioita jollain skalaarilla, tarkistaa, että
     // matriisi ei ole tyhjä.
     
     assert(A != NULL);
     
-    matrix* B = newMatrix(A->rows, A->columns);
-    
     int i = 0;
     int j = 0;
     
     for(i ; i < A->rows ; i++) {
         for(j ; j < A->columns ; j++) {
-            B->values[i][j] = A->values[i][j] * scalar;
+            A->values[i][j] = A->values[i][j] * scalar;
         }
         j = 0;
     }
-    
-    return B;
 }
 
 matrix* matrixSum(matrix* A, matrix* B) {

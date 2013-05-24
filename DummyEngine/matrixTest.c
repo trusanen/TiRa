@@ -38,9 +38,9 @@ void matrixTest() {
     matrix* F = newMatrix(7, 7);
     matrixFill(F, 7.0);
     
-    matrix* scalarMultiplyResult = matrixMultiplyScalar(F, 0.5);
+    matrixMultiplyScalar(F, 0.5);
     
-    printMatrix(scalarMultiplyResult);
+    printMatrix(F);
     
     deleteMatrix(A);
     deleteMatrix(B);
@@ -50,5 +50,4 @@ void matrixTest() {
     deleteMatrix(vector);
     deleteMatrix(vectorTranspose);
     deleteMatrix(F);
-    deleteMatrix(scalarMultiplyResult);
 }

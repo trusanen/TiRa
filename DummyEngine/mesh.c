@@ -4,23 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static float transR1[] = {1, 0, 0, 0};
-static float transR2[] = {0, 1, 0, 0};
-static float transR3[] = {0, 0, 1, 0};
-static float transR4[] = {0, 0, 0, 1};
-static float* transMatrixRowPointerArray[] = {
-    transR1,
-    transR2,
-    transR3,
-    transR4
-};
-static matrix translationMatrixStruct = {
-    4,
-    4,
-    transMatrixRowPointerArray
-};
-static matrix* translationMatrix = &translationMatrixStruct;
-
 vertex* newVertex(float x, float y, float z) {
     
     // Luo uuden verteksin (pisteen avaruudessa).
@@ -104,7 +87,7 @@ mesh* newMesh() {
     matrixFill(M->coords, 0);
     M->coords->values[3][0] = 1.0;
     
-    M->rotation = identityMatrix(4);
+    M->worldTransform = identityMatrix(4);
     
     M->polygons = NULL;
     
@@ -119,7 +102,7 @@ void deleteMesh(mesh* M) {
     assert(M != NULL);
     
     deleteMatrix(M->coords);
-    deleteMatrix(M->rotation);
+    deleteMatrix(M->worldTransform);
     
     polygon* P = M->polygons;
     
@@ -188,22 +171,11 @@ void meshTranslate(mesh* M, float x, float y, float z) {
     //
     // eli mallia on siirretty x:n, y:n ja z:n verran akseleita pitkin.
     
-    // Asetetaan staattiseen siirtomatriisiin oikeat arvot
+    // Asetetaan mallin siirtomatriisiin oikeat arvot
     
-    translationMatrix->values[0][3] = x;
-    translationMatrix->values[1][3] = y;
-    translationMatrix->values[2][3] = z;
-    
-    // Suoritetaan matriisikertolasku
-    
-    matrix* result = matrixMultiply(translationMatrix, M->coords);
-    
-    // Poistetaan alkuperäinen koordinaattimatriisi ja asetetaan
-    // uusi laskettu tilalle.
-    
-    deleteMatrix(M->coords);
-    
-    M->coords = result;
+    M->worldTransform->values[0][3] = x;
+    M->worldTransform->values[1][3] = y;
+    M->worldTransform->values[2][3] = z;
 }
 
 void meshRotate(mesh* M, float xRotation, float yRotation, float zRotation) {

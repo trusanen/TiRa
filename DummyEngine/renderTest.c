@@ -10,15 +10,15 @@ void renderTest() {
     // Luodaan verteksit, NEU = NorthEastUpper, 
     // SWL = SouthWestLower jne...
     
-    vertex* NEU = newVertex(1, 1, 1);
-    vertex* NWU = newVertex(1, -1, 1);
-    vertex* SEU = newVertex(-1, 1, 1);
-    vertex* SWU = newVertex(-1, -1, 1);
+    vertex* NEU = newVertex(-1, 1, 1);
+    vertex* NWU = newVertex(1, 1, 1);
+    vertex* SEU = newVertex(-1, 1, -1);
+    vertex* SWU = newVertex(1, 1, -1);
     
-    vertex* NEL = newVertex(1, 1, -1);
-    vertex* NWL = newVertex(1, -1, -1);
-    vertex* SEL = newVertex(-1, 1, -1);
-    vertex* SWL = newVertex(-1, -1, -1);
+    vertex* NEL = newVertex(-1, -1, 1);
+    vertex* NWL = newVertex(1, -1, 1);
+    vertex* SEL = newVertex(-1, -1, -1);
+    vertex* SWL = newVertex(1, -1, -1);
     
     // Muodostetaan polygonit
     
@@ -74,16 +74,18 @@ void renderTest() {
     
     // Siirretään mallia hieman
     
-    meshTranslate(testCube, 2.0, 1.0, 3.0);
+    meshTranslate(testCube, 2.0, 2.0, 8.0);
+    
+    printMatrix(testCube->coords);
     
     // Määritellään näkymän rajat
     
-    float Pfar = 20.0;
-    float Pnear = 0.1;
-    float Pright = -10.0;
-    float Pleft = 10.0;
-    float Ptop = 10.0;
-    float Pbottom = -10.0;
+    float Pfar = 30.0;
+    float Pnear = 5.0;
+    float Pright = -5.0;
+    float Pleft = 5.0;
+    float Ptop = 5.0;
+    float Pbottom = -5.0;
     
     // Lasketaan projektiomatriisi
     
@@ -111,6 +113,10 @@ void renderTest() {
     matrix* V2;
     matrix* V3;
     
+    matrix* V1trans;
+    matrix* V2trans;
+    matrix* V3trans;
+    
     int x1;
     int y1;
     int x2;
@@ -123,28 +129,44 @@ void renderTest() {
     
     while(P != NULL) {
         
-        V1 = matrixMultiply(projMatrix, P->verts[0]->coords);
-        V2 = matrixMultiply(projMatrix, P->verts[1]->coords);
-        V3 = matrixMultiply(projMatrix, P->verts[2]->coords);
+        V1trans = matrixMultiply(testCube->worldTransform, P->verts[0]->coords);
+        V2trans = matrixMultiply(testCube->worldTransform, P->verts[1]->coords);
+        V3trans = matrixMultiply(testCube->worldTransform, P->verts[2]->coords);
+        
+        V1 = matrixMultiply(projMatrix, V1trans);
+        V2 = matrixMultiply(projMatrix, V2trans);
+        V3 = matrixMultiply(projMatrix, V3trans);
+        
+        deleteMatrix(V1trans);
+        deleteMatrix(V2trans);
+        deleteMatrix(V3trans);
+        
+        matrixMultiplyScalar(V1, 1.0/V1->values[3][0]);
+        matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
+        matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
         
         printMatrix(V1);
         printMatrix(V2);
         printMatrix(V3);
         
-        x1 = 320+(int)(V1->values[0][0]+0.5);
-        y1 = 240+(int)(V1->values[1][0]+0.5);
-        x2 = 320+(int)(V2->values[0][0]+0.5);
-        y2 = 240+(int)(V2->values[1][0]+0.5);
-        x3 = 320+(int)(V3->values[0][0]+0.5);
-        y3 = 240+(int)(V3->values[1][0]+0.5);
+        x1 = 320+(int)(V1->values[0][0]*320+0.5);
+        y1 = 240+(int)(V1->values[1][0]*240+0.5);
+        x2 = 320+(int)(V2->values[0][0]*320+0.5);
+        y2 = 240+(int)(V2->values[1][0]*240+0.5);
+        x3 = 320+(int)(V3->values[0][0]*320+0.5);
+        y3 = 240+(int)(V3->values[1][0]*240+0.5);
+        
+        //printf("x1: %d\ny1: %d\nx2: %d\ny2: %d\nx3: %d\ny3: %d\n", x1, y1, x2, y2, x3, y3);
         
         putPixel(screen, x1, y1, white);
         putPixel(screen, x2, y2, white);
         putPixel(screen, x3, y3, white);
         
+        
         drawLine(screen, x1, y1, x2, y2, white);
         drawLine(screen, x2, y2, x3, y3, white);
         drawLine(screen, x3, y3, x1, y1, white);
+        
         
         P = P->next;
         
@@ -155,11 +177,12 @@ void renderTest() {
     
     SDL_Flip(screen);
     
-    SDL_Delay(3000);
+    SDL_SaveBMP(screen, "render.bmp");
+    
+    SDL_Delay(5000);
     
     SDL_Quit();
     
     deleteMatrix(projMatrix);
     deleteMesh(testCube);
-
 }

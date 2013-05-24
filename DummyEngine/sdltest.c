@@ -23,7 +23,22 @@ sdlTest() {
         j = 0;
     }
     
-    drawLine(screen, 10.5, 9.99, 49.99, 200.001, pixel);
+    // Piirretään kompassiruusu
+    
+    drawLine(screen, 200, 200, 200, 190, pixel);
+    
+    // Ei toimi!
+    drawLine(screen, 200, 200, 210, 190, pixel);
+    
+    drawLine(screen, 200, 200, 210, 200, pixel);
+    drawLine(screen, 200, 200, 210, 210, pixel);
+    drawLine(screen, 200, 200, 200, 210, pixel);
+    
+    // Ei toimi!
+    drawLine(screen, 200, 200, 190, 210, pixel);
+    
+    drawLine(screen, 200, 200, 190, 200, pixel);
+    drawLine(screen, 200, 200, 190, 190, pixel);
     
     SDL_Flip(screen);
     

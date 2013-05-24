@@ -23,7 +23,7 @@ typedef struct polygon_t {
 
 typedef struct {
     matrix* coords;
-    matrix* rotation;
+    matrix* worldTransform;
     polygon* polygons;
 } mesh;
 
