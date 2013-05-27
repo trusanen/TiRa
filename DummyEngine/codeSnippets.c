@@ -56,3 +56,20 @@ void meshTranslateOld(mesh* M, float x, float y, float z) {
     
     free(translationMatrix);
 }
+
+polygon* getLastPolygon(mesh* M) {
+    
+    // Hakee mallin M ensimmäiseksi lisätyn polygonin, eli linkitetyn listan
+    // viimeisen alkion. Tarkistaa, että malli ei ole tyhjä.
+    
+    assert(M != NULL);
+    
+    if(M->polygons != NULL) {
+        polygon* P = M->polygons;
+        while(P->next != NULL) {
+            P = P->next;
+        }
+        return P;
+    }
+    return NULL;
+}

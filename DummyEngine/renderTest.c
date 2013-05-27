@@ -1,80 +1,18 @@
 #include "mesh.h"
 #include "draw.h"
+#include <math.h>
 
 void renderTest() {
     
     // Luodaan testikuutio
     
-    mesh* testCube = newMesh();
-    
-    // Luodaan verteksit, NEU = NorthEastUpper, 
-    // SWL = SouthWestLower jne...
-    
-    vertex* NEU = newVertex(-1, 1, 1);
-    vertex* NWU = newVertex(1, 1, 1);
-    vertex* SEU = newVertex(-1, 1, -1);
-    vertex* SWU = newVertex(1, 1, -1);
-    
-    vertex* NEL = newVertex(-1, -1, 1);
-    vertex* NWL = newVertex(1, -1, 1);
-    vertex* SEL = newVertex(-1, -1, -1);
-    vertex* SWL = newVertex(1, -1, -1);
-    
-    // Muodostetaan polygonit
-    
-    polygon* front1 = newPolygon(SEU, SWU, SWL);
-    polygon* front2 = newPolygon(SWL, SEL, SEU);
-    setPolygonColor(front1, 0xff000000);
-    setPolygonColor(front2, 0xff000000);
-    
-    polygon* back1 = newPolygon(NEU, NWU, NWL);
-    polygon* back2 = newPolygon(NWL, NEL, NEU);
-    setPolygonColor(back1, 0x00ff0000);
-    setPolygonColor(back2, 0x00ff0000);
-    
-    polygon* right1 = newPolygon(SEU, NEU, NEL);
-    polygon* right2 = newPolygon(NEL, SEL, SEU);
-    setPolygonColor(right1, 0x0000ff00);
-    setPolygonColor(right2, 0x0000ff00);
-    
-    polygon* left1 = newPolygon(SWU, NWU, NWL);
-    polygon* left2 = newPolygon(NWL, SWL, SWU);
-    setPolygonColor(left1, 0xf0f0f000);
-    setPolygonColor(left2, 0xf0f0f000);
-    
-    polygon* top1 = newPolygon(NEU, SEU, SWU);
-    polygon* top2 = newPolygon(SWU, NWU, NEU);
-    setPolygonColor(top1, 0x0f0f0f00);
-    setPolygonColor(top2, 0x0f0f0f00);
-    
-    polygon* bottom1 = newPolygon(NEL, SEL, SWL);
-    polygon* bottom2 = newPolygon(SWL, NWL, NEL);
-    setPolygonColor(bottom1, 0xffffff00);
-    setPolygonColor(bottom2, 0xffffff00);
-    
-    // Lisätään polygonit malliin
-    
-    addPolygon(testCube, front1);
-    addPolygon(testCube, front2);
-    
-    addPolygon(testCube, back1);
-    addPolygon(testCube, back2);
-    
-    addPolygon(testCube, right1);
-    addPolygon(testCube, right2);
-    
-    addPolygon(testCube, left1);
-    addPolygon(testCube, left2);
-    
-    addPolygon(testCube, top1);
-    addPolygon(testCube, top2);
-    
-    addPolygon(testCube, bottom1);
-    addPolygon(testCube, bottom2);
+    mesh* testCube = newUnitCube();
     
     // Siirretään mallia hieman
     
     meshTranslate(testCube, 2.0, 2.0, 8.0);
+    meshRotate(testCube, 0, M_PI/4, 0);
+    meshScale(testCube, 1, 2, 1);
     
     printMatrix(testCube->coords);
     

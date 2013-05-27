@@ -58,6 +58,9 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
     int error = deltax / 2;
     int ystep;
     
+    // Jos suora on laskeva, y:n muutos on negatiivinen ja nousevan
+    // suoran taas positiivinen
+    
     if(y0 < y1) {
         ystep = 1;
     }
@@ -67,6 +70,9 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
     
     int x = x0;
     int y = y0;
+    
+    // Nyt iteroidaan vaan jokaisen x-koordinaatin yli ja piirretään
+    // piste oikealle korkeudelle.
     
     for(x ; x <= x1 ; x++) {
         if(steep) {
