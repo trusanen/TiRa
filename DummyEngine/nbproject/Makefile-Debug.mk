@@ -34,6 +34,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/_ext/73483906/sceneTest.o \
 	${OBJECTDIR}/_ext/73483906/primitives.o \
 	${OBJECTDIR}/_ext/73483906/testMain.o \
 	${OBJECTDIR}/_ext/73483906/meshTest.o \
@@ -41,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/73483906/matrix.o \
 	${OBJECTDIR}/_ext/73483906/renderTest.o \
 	${OBJECTDIR}/_ext/73483906/matrixTest.o \
+	${OBJECTDIR}/_ext/73483906/scene.o \
 	${OBJECTDIR}/_ext/73483906/codeSnippets.o \
 	${OBJECTDIR}/_ext/73483906/mesh.o \
 	${OBJECTDIR}/_ext/73483906/draw.o \
@@ -70,6 +72,11 @@ LDLIBSOPTIONS=-lSDL
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dummyengine ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/_ext/73483906/sceneTest.o: /home/topias/TiRa/TiRa/DummyEngine/sceneTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/sceneTest.o /home/topias/TiRa/TiRa/DummyEngine/sceneTest.c
 
 ${OBJECTDIR}/_ext/73483906/primitives.o: /home/topias/TiRa/TiRa/DummyEngine/primitives.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
@@ -105,6 +112,11 @@ ${OBJECTDIR}/_ext/73483906/matrixTest.o: /home/topias/TiRa/TiRa/DummyEngine/matr
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/matrixTest.o /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c
+
+${OBJECTDIR}/_ext/73483906/scene.o: /home/topias/TiRa/TiRa/DummyEngine/scene.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/scene.o /home/topias/TiRa/TiRa/DummyEngine/scene.c
 
 ${OBJECTDIR}/_ext/73483906/codeSnippets.o: /home/topias/TiRa/TiRa/DummyEngine/codeSnippets.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906

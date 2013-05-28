@@ -5,7 +5,8 @@
 
 matrix* newMatrix(int rows, int columns) {
     
-    // Luo uuden matriisin, tarkistaa, että rivejä ja sarakkeita on enemmän kuin 0
+    // Luo uuden matriisin, jonka alkiot alustetaan nollaksi.
+    // Tarkistaa, että rivejä ja sarakkeita on enemmän kuin 0.
     
     assert(rows > 0 && columns > 0);
     
@@ -30,6 +31,7 @@ matrix* newMatrix(int rows, int columns) {
         A->values[j] = malloc(sizeof(float) * columns);
     }
     
+    // Alustetaan matriisin alkiot vielä nollaksi
     matrixFill(A, 0);
     
     return A;

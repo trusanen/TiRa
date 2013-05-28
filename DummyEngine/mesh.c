@@ -263,7 +263,9 @@ void meshScale(mesh* M, float xScale, float yScale, float zScale) {
     //     [ 0  0  0  1 ]
     
     // Funktio asettaa kertoimet oikeisiin kohtiin mallin muunnosmatriisissa.
-    // Funktio tarkistta, että annettu malli ei ole tyhjä.
+    // Funktio tarkistaa, että annettu malli ei ole tyhjä.
+    
+    // EI TOIMI TÄYDELLISESTI, PAREMPI ASETTAA KOKONAAN OMA MATRIISINSA!
     
     assert(M != NULL);
     

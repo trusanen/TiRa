@@ -10,6 +10,9 @@ mesh* newUnitCube() {
     // Luodaan verteksit, NEU = NorthEastUpper, 
     // SWL = SouthWestLower jne...
     
+    // TÄLLÄ HETKELLÄ VIELÄ MÄÄRITELTY KUVAKULMA-AVARUUDESSA!
+    // VAIHDA MYÖHEMMIN!
+    
     vertex* NEU = meshNewVertex(unitCube, -1, 1, 1);
     vertex* NWU = meshNewVertex(unitCube, 1, 1, 1);
     vertex* SEU = meshNewVertex(unitCube, -1, 1, -1);

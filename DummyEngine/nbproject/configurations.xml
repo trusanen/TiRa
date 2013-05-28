@@ -7,6 +7,8 @@
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/draw.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/primitives.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/scene.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -19,6 +21,7 @@
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrixTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/meshTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/renderTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/sceneTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/sdltest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/testMain.c</itemPath>
       </logicalFolder>
@@ -28,6 +31,7 @@
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/primitives.c</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/scene.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

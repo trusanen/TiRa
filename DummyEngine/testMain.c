@@ -1,9 +1,11 @@
 void runTests() {
-    matrixTest();
+    //matrixTest();
     
-    meshTest();
+    //meshTest();
     
-    sdlTest();
+    //sdlTest();
     
-    renderTest();
+    //renderTest();
+    
+    sceneTest();
 }

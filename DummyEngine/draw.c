@@ -1,5 +1,7 @@
 #include "draw.h"
+#include "scene.h"
 #include <math.h>
+#include <assert.h>
 
 void putPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
     
@@ -98,5 +100,92 @@ void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
 }
 
 void drawPolygon(SDL_Surface* surface, polygon* P) {
+    
+}
+
+void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
+    
+    // Piirtää tilan wireframe-muodossa. Tarkistaa, että argumentit
+    // eivät ole tyhjiä.
+    
+    assert(surface != NULL && scene != NULL);
+    
+    if(scene->camera == NULL) {
+        printf("No camera assigned! Stopping render.");
+        return;
+    }
+    
+    matrix* viewMatrix = getViewMatrix(scene->camera);
+    
+    object* obj = scene->objects;
+    
+    while(obj != NULL) {
+        if(obj->mesh != NULL) {
+            
+            matrix* V1trans;
+            matrix* V2trans;
+            matrix* V3trans;
+            
+            matrix* V1;
+            matrix* V2;
+            matrix* V3;
+            
+            int x1;
+            int y1;
+            int x2;
+            int y2;
+            int x3;
+            int y3;
+
+            Uint32 white = 0xffffffff;
+            int screenWidth = surface->w;
+            int screenHeight = surface->h;
+            
+            matrix* projMatrix = scene->camera->perspectiveMatrix;
+            
+            polygon* P = obj->mesh->polygons;
+            
+            while(P != NULL) {
+                
+                V1trans = matrixMultiply(obj->worldTransform, P->verts[0]->coords);
+                V2trans = matrixMultiply(obj->worldTransform, P->verts[1]->coords);
+                V3trans = matrixMultiply(obj->worldTransform, P->verts[2]->coords);
+
+                V1 = matrixMultiply(projMatrix, V1trans);
+                V2 = matrixMultiply(projMatrix, V2trans);
+                V3 = matrixMultiply(projMatrix, V3trans);
+
+                deleteMatrix(V1trans);
+                deleteMatrix(V2trans);
+                deleteMatrix(V3trans);
+
+                matrixMultiplyScalar(V1, 1.0/V1->values[3][0]);
+                matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
+                matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
+
+                printMatrix(V1);
+                printMatrix(V2);
+                printMatrix(V3);
+
+                x1 = screenWidth+(int)(V1->values[0][0]*screenWidth+0.5);
+                y1 = screenHeight+(int)(V1->values[1][0]*screenHeight+0.5);
+                x2 = screenWidth+(int)(V2->values[0][0]*screenWidth+0.5);
+                y2 = screenHeight+(int)(V2->values[1][0]*screenHeight+0.5);
+                x3 = screenWidth+(int)(V3->values[0][0]*screenWidth+0.5);
+                y3 = screenHeight+(int)(V3->values[1][0]*screenHeight+0.5);
+
+                drawLine(surface, x1, y1, x2, y2, white);
+                drawLine(surface, x2, y2, x3, y3, white);
+                drawLine(surface, x3, y3, x1, y1, white);
+
+                P = P->next;
+
+                deleteMatrix(V1);
+                deleteMatrix(V2);
+                deleteMatrix(V3);
+            }
+        }
+        obj = obj->next;
+    }
     
 }

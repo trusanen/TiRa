@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include "draw.h"
 #include <math.h>
+#include "primitives.h"
 
 void renderTest() {
     
@@ -10,9 +11,9 @@ void renderTest() {
     
     // Siirretään mallia hieman
     
+    meshScale(testMesh, 1, 2, 1);
     meshTranslate(testMesh, -2.0, 0, 9);
     meshRotate(testMesh, 0, M_PI/4, 0);
-    meshScale(testMesh, 1, 2, 1);
     
     printMatrix(testMesh->coords);
     
@@ -28,6 +29,7 @@ void renderTest() {
     // Lasketaan projektiomatriisi
     
     matrix* projMatrix = newMatrix(4, 4);
+    matrixFill(projMatrix, 0);
     
     projMatrix->values[0][0] = (2*Pnear)/(Pright-Pleft);
     projMatrix->values[1][1] = (2*Pnear)/(Ptop-Pbottom);
