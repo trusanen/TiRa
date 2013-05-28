@@ -47,7 +47,7 @@ void meshScale(mesh* M, float xScale, float yScale, float zScale);
 void meshRotate(mesh* M, float xRotation, float yRotation, float zRotation);
 void meshTranslate(mesh* M, float x, float y, float z);
 
-mesh* newUnitCube();
+vertex* meshGetVertex(mesh* M, int n);
 
 #ifdef	__cplusplus
 extern "C" {

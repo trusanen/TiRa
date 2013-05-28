@@ -6,15 +6,15 @@ void renderTest() {
     
     // Luodaan testikuutio
     
-    mesh* testCube = newUnitCube();
+    mesh* testMesh = newUnitCube();
     
     // Siirretään mallia hieman
     
-    meshTranslate(testCube, 2.0, 2.0, 8.0);
-    meshRotate(testCube, 0, M_PI/4, 0);
-    meshScale(testCube, 1, 2, 1);
+    meshTranslate(testMesh, -2.0, 0, 9);
+    meshRotate(testMesh, 0, M_PI/4, 0);
+    meshScale(testMesh, 1, 2, 1);
     
-    printMatrix(testCube->coords);
+    printMatrix(testMesh->coords);
     
     // Määritellään näkymän rajat
     
@@ -63,13 +63,13 @@ void renderTest() {
     int y3;
     
     Uint32 white = 0xffffffff;
-    polygon* P = testCube->polygons;
+    polygon* P = testMesh->polygons;
     
     while(P != NULL) {
         
-        V1trans = matrixMultiply(testCube->worldTransform, P->verts[0]->coords);
-        V2trans = matrixMultiply(testCube->worldTransform, P->verts[1]->coords);
-        V3trans = matrixMultiply(testCube->worldTransform, P->verts[2]->coords);
+        V1trans = matrixMultiply(testMesh->worldTransform, P->verts[0]->coords);
+        V2trans = matrixMultiply(testMesh->worldTransform, P->verts[1]->coords);
+        V3trans = matrixMultiply(testMesh->worldTransform, P->verts[2]->coords);
         
         V1 = matrixMultiply(projMatrix, V1trans);
         V2 = matrixMultiply(projMatrix, V2trans);
@@ -122,5 +122,5 @@ void renderTest() {
     SDL_Quit();
     
     deleteMatrix(projMatrix);
-    deleteMesh(testCube);
+    deleteMesh(testMesh);
 }

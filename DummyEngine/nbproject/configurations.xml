@@ -27,6 +27,7 @@
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/main.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.c</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/primitives.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
