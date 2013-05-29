@@ -13,15 +13,15 @@ mesh* newUnitCube() {
     // TÄLLÄ HETKELLÄ VIELÄ MÄÄRITELTY KUVAKULMA-AVARUUDESSA!
     // VAIHDA MYÖHEMMIN!
     
-    vertex* NEU = meshNewVertex(unitCube, -1, 1, 1);
-    vertex* NWU = meshNewVertex(unitCube, 1, 1, 1);
-    vertex* SEU = meshNewVertex(unitCube, -1, 1, -1);
-    vertex* SWU = meshNewVertex(unitCube, 1, 1, -1);
+    vertex* NEU = meshNewVertex(unitCube, 1, 1, 1);
+    vertex* NWU = meshNewVertex(unitCube, -1, 1, 1);
+    vertex* SEU = meshNewVertex(unitCube, 1, -1, 1);
+    vertex* SWU = meshNewVertex(unitCube, -1, -1, 1);
     
-    vertex* NEL = meshNewVertex(unitCube, -1, -1, 1);
-    vertex* NWL = meshNewVertex(unitCube, 1, -1, 1);
-    vertex* SEL = meshNewVertex(unitCube, -1, -1, -1);
-    vertex* SWL = meshNewVertex(unitCube, 1, -1, -1);
+    vertex* NEL = meshNewVertex(unitCube, 1, 1, -1);
+    vertex* NWL = meshNewVertex(unitCube, -1, 1, -1);
+    vertex* SEL = meshNewVertex(unitCube, 1, -1, -1);
+    vertex* SWL = meshNewVertex(unitCube, -1, -1, -1);
     
     // Muodostetaan polygonit
     

@@ -15,7 +15,7 @@ void sceneTest() {
     
     SDL_Flip(screen);
     
-    SDL_Delay(2000);
+    SDL_Delay(5000);
     
     SDL_Quit();
     

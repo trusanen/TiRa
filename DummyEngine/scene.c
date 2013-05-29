@@ -124,7 +124,48 @@ camera* sceneNewCamera(scene* scene, object* obj) {
     camera* cam = malloc(sizeof(camera));
     
     cam->cameraObj = obj;
-    cam->perspectiveMatrix = identityMatrix(4);
+    
+/*
+    // Määritellään näkymän rajat
+    
+    float far = 10.0;
+    float near = 2;
+    float fov = M_PI/2;
+    float S = 1/(tan(fov*0.5));
+    
+    // Lasketaan projektiomatriisi
+    
+    cam->perspectiveMatrix = newMatrix(4, 4);
+    matrixFill(cam->perspectiveMatrix, 0);
+    
+    cam->perspectiveMatrix->values[0][0] = S;
+    cam->perspectiveMatrix->values[1][1] = S;
+    cam->perspectiveMatrix->values[2][2] = -far/(far-near);
+    cam->perspectiveMatrix->values[2][3] = -1;
+    cam->perspectiveMatrix->values[3][2] = -(far*near)/(far-near);
+*/
+    
+    // Määritellään näkymän rajat
+    
+    float Pfar = 5.0;
+    float Pnear = 1.0;
+    float Pright = -5.0;
+    float Pleft = 5.0;
+    float Ptop = 5.0;
+    float Pbottom = -5.0;
+    
+    // Lasketaan projektiomatriisi
+    
+    cam->perspectiveMatrix = newMatrix(4, 4);
+    matrixFill(cam->perspectiveMatrix, 0);
+    
+    cam->perspectiveMatrix->values[0][0] = (2*Pnear)/(Pright-Pleft);
+    cam->perspectiveMatrix->values[1][1] = (2*Pnear)/(Ptop-Pbottom);
+    cam->perspectiveMatrix->values[0][2] = (Pright + Pleft)/(Pright - Pleft);
+    cam->perspectiveMatrix->values[1][2] = (Ptop + Pbottom)/(Ptop - Pbottom);
+    cam->perspectiveMatrix->values[2][2] = -1*(Pfar+Pnear)/(Pfar-Pnear);
+    cam->perspectiveMatrix->values[3][2] = -1;
+    cam->perspectiveMatrix->values[2][3] = (-2*Pfar*Pnear)/(Pfar-Pnear);
     
     if(scene->camera != NULL) {
         deleteCamera(scene->camera);
@@ -164,7 +205,7 @@ scene* newScene() {
     object* cam = sceneNewObject(scene);
     
     objectTranslate(cam, 3, -3, 3);
-    objectRotate(cam, M_PI/4, 0, M_PI/4);
+    objectRotate(cam, -M_PI/4, 0, M_PI/4);
     
     sceneNewCamera(scene, cam);
     
@@ -210,7 +251,7 @@ matrix* getViewMatrix(camera* cam) {
     
     // Allokoidaan tilaa sopiville matriiseille
     
-    matrix* viewMatrix = newMatrix(4, 4);
+    matrix* viewMatrix = identityMatrix(4);
     
     // R kameran rotaatio- ja T translaatiomatriisi.
     
@@ -225,8 +266,8 @@ matrix* getViewMatrix(camera* cam) {
     
     for(i ; i < R->rows ; i++) {
         for(j ; j < R->columns ; j++) {
-            R->values[i][j] = cam->cameraObj->mesh->worldTransform->values[i][j];
-            viewMatrix->values[j][i] = cam->cameraObj->mesh->worldTransform->values[i][j];
+            R->values[i][j] = cam->cameraObj->worldTransform->values[i][j];
+            viewMatrix->values[j][i] = cam->cameraObj->worldTransform->values[i][j];
         }
         j = 0;
     }

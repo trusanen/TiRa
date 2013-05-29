@@ -32,7 +32,8 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
     
     // Jos y:n muutos on suurempaa kuin x:n muutos, vaihdetaan koordinaatti-
     // akseleita keskenään. Tämä estää sellaiset tilanteet, joissa
-    // viiva on esimerkiksi pysty- tai vaakasuora
+    // viiva on esimerkiksi pystysuora.
+    
     if(steep) {
         tmp = x0;
         x0 = y0;
@@ -91,6 +92,18 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
     }
 }
 
+void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color) {
+    
+    int a = (int)(x+0.5);
+    int b = (int)(y+0.5);
+    
+    int i = 0;
+    
+    for(i ; i < 360 ; i = i + 10) {
+        putPixel(surface, a + (r*cos(i*M_PI/180)), b + (r*sin(i*M_PI/180)), color);
+    }
+}
+
 void drawMeshWireframe(SDL_Surface* surface, mesh* M) {
     
 }
@@ -116,6 +129,7 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
     }
     
     matrix* viewMatrix = getViewMatrix(scene->camera);
+    matrix* projMatrix = scene->camera->perspectiveMatrix;
     
     object* obj = scene->objects;
     
@@ -125,6 +139,10 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
             matrix* V1trans;
             matrix* V2trans;
             matrix* V3trans;
+            
+            matrix* V1view;
+            matrix* V2view;
+            matrix* V3view;
             
             matrix* V1;
             matrix* V2;
@@ -138,45 +156,79 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
             int y3;
 
             Uint32 white = 0xffffffff;
+            Uint32 cyan = 0x00ff00ff;
             int screenWidth = surface->w;
             int screenHeight = surface->h;
-            
-            matrix* projMatrix = scene->camera->perspectiveMatrix;
             
             polygon* P = obj->mesh->polygons;
             
             while(P != NULL) {
                 
+                // Maailmamuunnos
+                
                 V1trans = matrixMultiply(obj->worldTransform, P->verts[0]->coords);
                 V2trans = matrixMultiply(obj->worldTransform, P->verts[1]->coords);
                 V3trans = matrixMultiply(obj->worldTransform, P->verts[2]->coords);
+                
+                //printMatrix(V1trans);
+                
+                // Kuvakulmamuunnos
+                
+                V1view = matrixMultiply(viewMatrix, V1trans);
+                V2view = matrixMultiply(viewMatrix, V2trans);
+                V3view = matrixMultiply(viewMatrix, V3trans);
+                
+                //printMatrix(V1view);
 
+                // Projektiomuunnos
+                
                 V1 = matrixMultiply(projMatrix, V1trans);
                 V2 = matrixMultiply(projMatrix, V2trans);
                 V3 = matrixMultiply(projMatrix, V3trans);
+                
+                //printMatrix(V1);
 
+                // Poistetaan turhat matriisit
+                
                 deleteMatrix(V1trans);
                 deleteMatrix(V2trans);
                 deleteMatrix(V3trans);
+                
+                deleteMatrix(V1view);
+                deleteMatrix(V2view);
+                deleteMatrix(V3view);
+                
+                // Koordinaattien palauttaminen w = 1 avaruuteen,
+                // ns. "Perspective divide"
 
                 matrixMultiplyScalar(V1, 1.0/V1->values[3][0]);
                 matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
                 matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
-
+                
                 printMatrix(V1);
                 printMatrix(V2);
                 printMatrix(V3);
+                
+                // Polygonien kulmapisteet ruudulla
 
-                x1 = screenWidth+(int)(V1->values[0][0]*screenWidth+0.5);
-                y1 = screenHeight+(int)(V1->values[1][0]*screenHeight+0.5);
-                x2 = screenWidth+(int)(V2->values[0][0]*screenWidth+0.5);
-                y2 = screenHeight+(int)(V2->values[1][0]*screenHeight+0.5);
-                x3 = screenWidth+(int)(V3->values[0][0]*screenWidth+0.5);
-                y3 = screenHeight+(int)(V3->values[1][0]*screenHeight+0.5);
+                x1 = screenWidth*0.5+(int)(V1->values[0][0]*screenWidth*0.5+0.5);
+                y1 = screenHeight*0.5+(int)(V1->values[1][0]*screenHeight*0.5+0.5);
+                x2 = screenWidth*0.5+(int)(V2->values[0][0]*screenWidth*0.5+0.5);
+                y2 = screenHeight*0.5+(int)(V2->values[1][0]*screenHeight*0.5+0.5);
+                x3 = screenWidth*0.5+(int)(V3->values[0][0]*screenWidth*0.5+0.5);
+                y3 = screenHeight*0.5+(int)(V3->values[1][0]*screenHeight*0.5+0.5);
 
+                // Piirretään viivat
+                
                 drawLine(surface, x1, y1, x2, y2, white);
                 drawLine(surface, x2, y2, x3, y3, white);
                 drawLine(surface, x3, y3, x1, y1, white);
+                
+                // Piirretään verteksien kohdalle pisteet
+                
+                drawCircle(surface, x1, y1, V1->values[2][0]*5.0, cyan);
+                drawCircle(surface, x2, y2, V2->values[2][0]*5.0, cyan);
+                drawCircle(surface, x3, y3, V3->values[2][0]*5.0, cyan);
 
                 P = P->next;
 

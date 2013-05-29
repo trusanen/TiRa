@@ -2,12 +2,13 @@
 #include "draw.h"
 #include <math.h>
 #include "primitives.h"
+#include "codeSnippets.h"
 
 void renderTest() {
     
     // Luodaan testikuutio
     
-    mesh* testMesh = newUnitCube();
+    mesh* testMesh = newUnitCubeOld();
     
     // Siirretään mallia hieman
     

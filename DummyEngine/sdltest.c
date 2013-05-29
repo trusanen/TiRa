@@ -34,6 +34,10 @@ sdlTest() {
     drawLine(screen, 200, 200, 190, 200, pixel);
     drawLine(screen, 200, 200, 190, 190, pixel);
     
+    // Piirretään ympyrä
+    
+    drawCircle(screen, 300.0, 300.0, 5.0, 0x0000ff00);
+    
     SDL_Flip(screen);
     
     SDL_Delay(2000);

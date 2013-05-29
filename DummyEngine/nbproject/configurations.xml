@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/codeSnippets.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/draw.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.h</itemPath>
