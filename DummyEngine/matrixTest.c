@@ -61,6 +61,20 @@ void matrixTest() {
     fillResult->values[1][0] = 5.0;
     fillResult->values[1][1] = 5.0;
     
+    matrix* transposeResult = newMatrix(1, 3);
+    transposeResult->values[0][0] = 1.9;
+    transposeResult->values[0][1] = 1.9;
+    transposeResult->values[0][2] = 1.9;
+    
+    matrix* scalarMulResult = newMatrix(7,7);
+    matrixFill(scalarMulResult, 3.5);
+    
+    matrix* identity = newMatrix(4, 4);
+    identity->values[0][0] = 1;
+    identity->values[1][1] = 1;
+    identity->values[2][2] = 1;
+    identity->values[3][3] = 1;
+    
     // Aloitetaan testit
     
     matrix* A = newMatrix(3,3);
@@ -80,21 +94,22 @@ void matrixTest() {
     assert(matrixNorm(E, fillResult) == 0);
     
     matrix* vector = newMatrix(3, 1);
-    
     matrixFill(vector, 1.9);
-    
-    printMatrix(vector);
-    
     matrix* vectorTranspose = matrixTranspose(vector);
     
-    printMatrix(vectorTranspose);
+    assert(matrixNorm(vectorTranspose, transposeResult) == 0);
     
     matrix* F = newMatrix(7, 7);
     matrixFill(F, 7.0);
-    
     matrixMultiplyScalar(F, 0.5);
     
-    printMatrix(F);
+    assert(matrixNorm(F, scalarMulResult) == 0);
+    
+    matrix* G = identityMatrix(4);
+    
+    assert(matrixNorm(G, identity) == 0);
+    
+    // Poistetaan matriisit
     
     deleteMatrix(A);
     deleteMatrix(B);
@@ -104,7 +119,12 @@ void matrixTest() {
     deleteMatrix(vector);
     deleteMatrix(vectorTranspose);
     deleteMatrix(F);
+    deleteMatrix(G);
     
     deleteMatrix(sumResult);
     deleteMatrix(mulResult);
+    deleteMatrix(fillResult);
+    deleteMatrix(transposeResult);
+    deleteMatrix(scalarMulResult);
+    deleteMatrix(identity);
 }
