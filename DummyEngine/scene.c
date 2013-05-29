@@ -1,6 +1,4 @@
-#include "scene.h"
 #include "matrix.h"
-#include "mesh.h"
 #include <assert.h>
 #include <math.h>
 #include "primitives.h"
@@ -221,9 +219,7 @@ scene* newScene() {
     scene->camera = NULL;
     
     object* unitCube = sceneNewObject(scene);
-    unitCube->mesh = newUnitCube();
-    
-    
+    unitCube->mesh = newUnitCube(scene);
     
     objectScale(unitCube, 5, 1, 1);
     objectRotate(unitCube, 0, 0, M_PI/2);
@@ -237,6 +233,48 @@ scene* newScene() {
     sceneNewCamera(scene, cam);
     
     return scene;
+}
+
+void deleteScene(scene* scene) {
+    
+    // Poistaa tilan poistamalla kaikki sen mallit ja objektit
+    // sekä kameran. Tarkistaa, että annettu osoitin ei ole tyhjä.
+    
+    assert(scene != NULL);
+    
+    mesh* M = scene->meshes;
+    
+    while(M != NULL) {
+        deleteMesh(M);
+        M = M->next;
+    }
+    
+    object* obj = scene->objects;
+    
+    while(obj != NULL) {
+        deleteObject(obj);
+        obj = obj->next;
+    }
+    
+    deleteCamera(scene->camera);
+}
+
+mesh* sceneNewMesh(scene* scene) {
+    
+    // Luo uuden 3D-mallin, joka on aluksi tyhjä. Malli koostuu polygoneista,
+    // jotka tallennetaan yksisuuntaisena linkitettynä listana.
+    
+    mesh* M = malloc(sizeof(mesh));
+    
+    M->vertices = NULL;
+    M->polygons = NULL;
+    
+    M->next = NULL;
+    M->prev = NULL;
+    
+    addMesh(scene, M);
+    
+    return M;
 }
 
 void addObject(scene* scene, object* obj) {
@@ -256,7 +294,22 @@ void addObject(scene* scene, object* obj) {
     scene->objects = obj;
 }
 
-
+void addMesh(scene* scene, mesh* M) {
+    
+    // Lisää mallin tilaan, tarkistaa, että osoittimet eivät ole
+    // tyhjiä.
+    
+    assert(scene != NULL && M != NULL);
+    
+    mesh* meshes = scene->meshes;
+    
+    if(meshes != NULL) {
+        meshes->prev = M;
+        M->next = meshes;
+    }
+    
+    scene->meshes = M;
+}
 
 matrix* getViewMatrix(camera* cam) {
     

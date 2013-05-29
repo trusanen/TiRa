@@ -7,6 +7,10 @@
 #define epsilon 0.01
 
 float absoluteValue(float x) {
+    
+    // Palauttaa float-tyyppisen muuttujan itseisarvon, fabs() ei
+    // jostain syystä toiminut, vaan palautti integerin.
+    
     if(x < 0) {
         return -x;
     }
@@ -46,6 +50,8 @@ float matrixNorm(matrix* A, matrix* B) {
 
 void matrixTest() {
     
+    // Tämä testi testaa matriisiluokan toimivuutta.
+    
     // Määritellään vastausmatriisit
     
     matrix* sumResult = newMatrix(3, 3);
@@ -77,6 +83,8 @@ void matrixTest() {
     
     // Aloitetaan testit
     
+    // Matriisien summan testaus
+    
     matrix* A = newMatrix(3,3);
     matrix* B = newMatrix(3,3);
     
@@ -86,12 +94,18 @@ void matrixTest() {
     matrix* C = matrixSum(A,B);
     assert(matrixNorm(C, sumResult) == 0);
     
+    // Matriisien tulon testaus
+    
     matrix* D = matrixMultiply(A,B);
     assert(matrixNorm(D, mulResult) == 0);
+    
+    // Matriisin täyttöalgoritmin testaus
     
     matrix* E = newMatrix(2, 2);
     matrixFill(E, 5.0);
     assert(matrixNorm(E, fillResult) == 0);
+    
+    // Matriisin transpoosin testaus
     
     matrix* vector = newMatrix(3, 1);
     matrixFill(vector, 1.9);
@@ -99,11 +113,15 @@ void matrixTest() {
     
     assert(matrixNorm(vectorTranspose, transposeResult) == 0);
     
+    // Matriisin skalaarilla kertomisen testaus
+    
     matrix* F = newMatrix(7, 7);
     matrixFill(F, 7.0);
     matrixMultiplyScalar(F, 0.5);
     
     assert(matrixNorm(F, scalarMulResult) == 0);
+    
+    // Identiteettimatriisialgoritmin testaus
     
     matrix* G = identityMatrix(4);
     

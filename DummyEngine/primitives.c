@@ -1,11 +1,11 @@
-#include "mesh.h"
+#include "scene.h"
 #include <assert.h>
 
-mesh* newUnitCube() {
+mesh* newUnitCube(scene* scene) {
     
     // Luo yksikkökuution
     
-    mesh* unitCube = newMesh();
+    mesh* unitCube = sceneNewMesh(scene);
     
     // Luodaan verteksit, NEU = NorthEastUpper, 
     // SWL = SouthWestLower jne...
@@ -55,7 +55,7 @@ mesh* newUnitCube() {
     return unitCube;
 }
 
-mesh* newGrid(int x, int y) {
+mesh* newGrid(scene* scene, int x, int y) {
     
     // Luo x*y -ruudukon, tarkistaa, että x ja y ovat suurempia kuin 1
     
@@ -63,7 +63,7 @@ mesh* newGrid(int x, int y) {
     
     assert(x > 0 && y > 0);
     
-    mesh* grid = newMesh();
+    mesh* grid = sceneNewMesh(scene);
     
     vertex* NW = meshNewVertex(grid, 0, 0, 0);
     vertex* SW = meshNewVertex(grid, 0, 1, 0);

@@ -1,3 +1,4 @@
+/*
 #include <assert.h>
 #include "mesh.h"
 #include <stdlib.h>
@@ -256,3 +257,4 @@ void renderTestOld() {
     deleteMatrix(projMatrix);
     deleteMesh(testMesh);
 }
+*/

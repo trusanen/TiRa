@@ -5,11 +5,14 @@
  * Created on May 28, 2013, 12:31 PM
  */
 
-#ifndef RENDER_H
-#define	RENDER_H
+#ifndef SCENE_H
+#define	SCENE_H
 
 #include "matrix.h"
 #include "mesh.h"
+
+// Forward declaration of mesh
+struct mesh;
 
 typedef struct object_t {
     matrix* worldTransform;
@@ -30,7 +33,7 @@ typedef struct {
     camera* camera;
 } scene;
 
-object* newObject();
+object* sceneNewObject(scene* scene);
 void deleteObject();
 
 void objectScale(object* O, float xScale, float yScale, float zScale);
@@ -42,9 +45,12 @@ void deleteCamera(camera* cam);
 matrix* getViewMatrix(camera* cam);
 
 scene* newScene();
-void deleteScene();
+void deleteScene(scene* scene);
+
+mesh* sceneNewMesh(scene* scene);
 
 void addObject(scene* scene, object* obj);
+void addMesh(scene* scene, mesh* M);
 
 #ifdef	__cplusplus
 extern "C" {
@@ -57,5 +63,5 @@ extern "C" {
 }
 #endif
 
-#endif	/* RENDER_H */
+#endif	/* SCENE_H */
 

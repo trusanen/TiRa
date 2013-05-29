@@ -104,34 +104,12 @@ void setPolygonColor(polygon* P, Uint32 color) {
     
 }
 
-mesh* newMesh() {
-    
-    // Luo uuden 3D-mallin, joka on aluksi tyhjä. Malli koostuu polygoneista,
-    // jotka tallennetaan yksisuuntaisena linkitettynä listana.
-    
-    mesh* M = malloc(sizeof(mesh));
-    
-    M->coords = newMatrix(4,1);
-    matrixFill(M->coords, 0);
-    M->coords->values[3][0] = 1.0;
-    
-    M->worldTransform = identityMatrix(4);
-    
-    M->vertices = NULL;
-    M->polygons = NULL;
-    
-    return M;
-}
-
 void deleteMesh(mesh* M) {
     
     // Poistaa mallin poistamalla kaikki sen polygonit ja verteksit. 
     // Tarkistaa, että malli ei ole tyhjä.
     
     assert(M != NULL);
-    
-    deleteMatrix(M->coords);
-    deleteMatrix(M->worldTransform);
     
     polygon* P = M->polygons;
     
@@ -183,103 +161,6 @@ void addVertex(mesh* M, vertex* V) {
     
     M->vertices = V;
     
-}
-
-void meshTranslate(mesh* M, float x, float y, float z) {
-    
-    // Siirtää mallia M x-, y- ja z-akselien suuntaisesti. Tarkistaa, että
-    // malli ei ole tyhjä.
-    
-    assert(M != NULL);
-    
-    // Siirtomatriisi on seuraavanlainen:
-    //
-    // [ 1 0 0 x ]
-    // [ 0 1 0 y ]
-    // [ 0 0 1 z ]
-    // [ 0 0 0 1 ]
-    //
-    // Kun tällä kerrotaan koordinaattimatriisia, saadaan
-    //
-    // [ x0 + x ]
-    // [ y0 + y ]
-    // [ z0 + z ]
-    // [   1    ]
-    //
-    // eli mallia on siirretty x:n, y:n ja z:n verran akseleita pitkin.
-    
-    // Asetetaan mallin siirtomatriisiin oikeat arvot
-    
-    M->worldTransform->values[0][3] = x;
-    M->worldTransform->values[1][3] = y;
-    M->worldTransform->values[2][3] = z;
-}
-
-void meshRotate(mesh* M, float xRotation, float yRotation, float zRotation) {
-    
-    // Kääntää mallia globaalin avaruuden (world space) standardikannan
-    // x-, y- ja z-akselien ympäri.
-    
-    // Kääntö x-akselin ympäri voidaan määritellä matriisilla
-    
-    //      [ 1   0       0    0 ]
-    // Rx = [ 0 cos(t) -sin(t) 0 ]
-    //      [ 0 sin(t)  cos(t) 0 ]
-    //      [ 0   0       0    1 ]
-    
-    // Samanlainen matriisi voidaan määritellä myös käännölle y- ja 
-    // z-akselien ympäri. Kun nämä matriisit kerrotaan keskenään, saadaan
-    // kokonaiskääntö R = Rz * Ry * Rx.
-    
-    // Funktio asettaa vain oikeat arvot matriisimuunnoksen vastaaviin
-    // kohtiin. Funktio tarkistaa, että malli ei ole tyhjä.
-    
-    assert(M != NULL);
-    
-    M->worldTransform->values[0][0] = cos(yRotation)*cos(zRotation);
-    M->worldTransform->values[0][1] = sin(xRotation)*sin(yRotation)*cos(zRotation)
-            - cos(xRotation)*sin(zRotation);
-    M->worldTransform->values[0][2] = cos(xRotation)*sin(yRotation)*cos(zRotation)
-            + sin(xRotation)*sin(zRotation);
-    M->worldTransform->values[1][0] = cos(yRotation)*sin(zRotation);
-    M->worldTransform->values[1][1] = cos(xRotation)*cos(zRotation)
-            + sin(xRotation)*sin(yRotation)*sin(zRotation);
-    M->worldTransform->values[1][2] = -sin(xRotation)*cos(zRotation)
-            + cos(xRotation)*sin(yRotation)*sin(zRotation);
-    M->worldTransform->values[2][0] = -sin(yRotation);
-    M->worldTransform->values[2][1] = sin(xRotation)*cos(yRotation);
-    M->worldTransform->values[2][2] = cos(xRotation)*cos(yRotation);
-}
-
-void meshScale(mesh* M, float xScale, float yScale, float zScale) {
-    
-    // Skaalaa mallia globaalin avaruuden x-, y- ja z-akseleiden suuntaisesti.
-    
-    // Skaalausmatriisi voidaan määritellä seuraavasti:
-    
-    //     [ Sx 0  0  0 ]
-    // S = [ 0  Sy 0  0 ]
-    //     [ 0  0  Sz 0 ]
-    //     [ 0  0  0  1 ]
-    
-    // Funktio asettaa kertoimet oikeisiin kohtiin mallin muunnosmatriisissa.
-    // Funktio tarkistaa, että annettu malli ei ole tyhjä.
-    
-    // EI TOIMI TÄYDELLISESTI, PAREMPI ASETTAA KOKONAAN OMA MATRIISINSA!
-    
-    assert(M != NULL);
-    
-    M->worldTransform->values[0][0] = M->worldTransform->values[0][0]*xScale;
-    M->worldTransform->values[1][0] = M->worldTransform->values[1][0]*xScale;
-    M->worldTransform->values[2][0] = M->worldTransform->values[2][0]*xScale;
-    
-    M->worldTransform->values[0][1] = M->worldTransform->values[0][1]*yScale;
-    M->worldTransform->values[1][1] = M->worldTransform->values[1][1]*yScale;
-    M->worldTransform->values[2][1] = M->worldTransform->values[2][1]*yScale;
-    
-    M->worldTransform->values[0][2] = M->worldTransform->values[0][2]*zScale;
-    M->worldTransform->values[1][2] = M->worldTransform->values[1][2]*zScale;
-    M->worldTransform->values[2][2] = M->worldTransform->values[2][2]*zScale;
 }
 
 vertex* meshGetVertex(mesh* M, int n) {

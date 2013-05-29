@@ -9,9 +9,10 @@
 #define	PRIMITIVES_H
 
 #include "mesh.h"
+#include "scene.h"
 
-mesh* newUnitCube();
-mesh* newGrid(int x, int y);
+mesh* newUnitCube(scene* scene);
+mesh* newGrid(scene* scene, int x, int y);
 
 #ifdef	__cplusplus
 extern "C" {

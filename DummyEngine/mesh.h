@@ -11,6 +11,8 @@
 #include "matrix.h"
 #include "SDL/SDL.h"
 
+struct scene;
+
 typedef struct vertex_t {
     matrix* coords;
     struct vertex_t* next;
@@ -24,11 +26,11 @@ typedef struct polygon_t {
     struct polygon_t* prev;
 } polygon;
 
-typedef struct {
-    matrix* coords;
-    matrix* worldTransform;
+typedef struct mesh_t {
     vertex* vertices;
     polygon* polygons;
+    struct mesh_t* next;
+    struct mesh_t* prev;
 } mesh;
 
 vertex* meshNewVertex(mesh* M, float x, float y, float z);
@@ -38,14 +40,9 @@ polygon* meshNewPolygon(mesh* M, vertex* A, vertex* B, vertex* C);
 void deletePolygon(polygon* P);
 void setPolygonColor(polygon* P, Uint32 color);
 
-mesh* newMesh();
 void deleteMesh(mesh* M);
 void addVertex(mesh* M, vertex* V);
 void addPolygon(mesh* M, polygon* P);
-
-void meshScale(mesh* M, float xScale, float yScale, float zScale);
-void meshRotate(mesh* M, float xRotation, float yRotation, float zRotation);
-void meshTranslate(mesh* M, float x, float y, float z);
 
 vertex* meshGetVertex(mesh* M, int n);
 
