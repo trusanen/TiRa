@@ -114,6 +114,27 @@ void objectRotate(object* obj, float xRotation, float yRotation, float zRotation
     obj->worldTransform->values[2][2] = cos(xRotation)*cos(yRotation);
 }
 
+void objectScale(object* obj, float xScale, float yScale, float zScale) {
+    
+    // Skaalaa objektia globaalin avaruuden x-, y- ja z-akseleiden suuntaisesti.
+    
+    // Skaalausmatriisi voidaan määritellä seuraavasti:
+    
+    //     [ Sx 0  0  0 ]
+    // S = [ 0  Sy 0  0 ]
+    //     [ 0  0  Sz 0 ]
+    //     [ 0  0  0  1 ]
+    
+    // Funktio asettaa kertoimet oikeisiin kohtiin mallin skaalausmatriisissa.
+    // Funktio tarkistaa, että annettu malli ei ole tyhjä.
+    
+    assert(obj != NULL);
+    
+    obj->scaleTransform->values[0][0] = xScale;
+    obj->scaleTransform->values[1][1] = yScale;
+    obj->scaleTransform->values[2][2] = zScale;
+}
+
 camera* sceneNewCamera(scene* scene, object* obj) {
     
     // Luo uuden kameran ja asettaa sen paikaksi objektin obj paikan.
@@ -125,11 +146,10 @@ camera* sceneNewCamera(scene* scene, object* obj) {
     
     cam->cameraObj = obj;
     
-/*
     // Määritellään näkymän rajat
     
-    float far = 10.0;
-    float near = 2;
+    float far = 50.0;
+    float near = 1.0;
     float fov = M_PI/2;
     float S = 1/(tan(fov*0.5));
     
@@ -139,12 +159,12 @@ camera* sceneNewCamera(scene* scene, object* obj) {
     matrixFill(cam->perspectiveMatrix, 0);
     
     cam->perspectiveMatrix->values[0][0] = S;
-    cam->perspectiveMatrix->values[1][1] = S;
-    cam->perspectiveMatrix->values[2][2] = -far/(far-near);
-    cam->perspectiveMatrix->values[2][3] = -1;
-    cam->perspectiveMatrix->values[3][2] = -(far*near)/(far-near);
-*/
+    cam->perspectiveMatrix->values[2][2] = S;
+    cam->perspectiveMatrix->values[1][1] = far/(far-near);
+    cam->perspectiveMatrix->values[1][3] = -(far*near)/(far-near);
+    cam->perspectiveMatrix->values[3][1] = 1;
     
+/*
     // Määritellään näkymän rajat
     
     float Pfar = 5.0;
@@ -166,6 +186,7 @@ camera* sceneNewCamera(scene* scene, object* obj) {
     cam->perspectiveMatrix->values[2][2] = -1*(Pfar+Pnear)/(Pfar-Pnear);
     cam->perspectiveMatrix->values[3][2] = -1;
     cam->perspectiveMatrix->values[2][3] = (-2*Pfar*Pnear)/(Pfar-Pnear);
+*/
     
     if(scene->camera != NULL) {
         deleteCamera(scene->camera);
@@ -202,9 +223,15 @@ scene* newScene() {
     object* unitCube = sceneNewObject(scene);
     unitCube->mesh = newUnitCube();
     
+    
+    
+    objectScale(unitCube, 5, 1, 1);
+    objectRotate(unitCube, 0, 0, M_PI/2);
+    objectTranslate(unitCube, 3, -3, 3);
+    
     object* cam = sceneNewObject(scene);
     
-    objectTranslate(cam, 3, -3, 3);
+    objectTranslate(cam, 10, -10, 10);
     objectRotate(cam, -M_PI/4, 0, M_PI/4);
     
     sceneNewCamera(scene, cam);

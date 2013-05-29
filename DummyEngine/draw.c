@@ -136,9 +136,13 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
     while(obj != NULL) {
         if(obj->mesh != NULL) {
             
-            matrix* V1trans;
-            matrix* V2trans;
-            matrix* V3trans;
+            matrix* V1scale;
+            matrix* V2scale;
+            matrix* V3scale;
+            
+            matrix* V1world;
+            matrix* V2world;
+            matrix* V3world;
             
             matrix* V1view;
             matrix* V2view;
@@ -164,35 +168,43 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
             
             while(P != NULL) {
                 
+                // Skaalaus
+                
+                V1scale = matrixMultiply(obj->scaleTransform, P->verts[0]->coords);
+                V2scale = matrixMultiply(obj->scaleTransform, P->verts[1]->coords);
+                V3scale = matrixMultiply(obj->scaleTransform, P->verts[2]->coords);
+                
+                //printMatrix(V1scale);
+                
                 // Maailmamuunnos
                 
-                V1trans = matrixMultiply(obj->worldTransform, P->verts[0]->coords);
-                V2trans = matrixMultiply(obj->worldTransform, P->verts[1]->coords);
-                V3trans = matrixMultiply(obj->worldTransform, P->verts[2]->coords);
+                V1world = matrixMultiply(obj->worldTransform, V1scale);
+                V2world = matrixMultiply(obj->worldTransform, V2scale);
+                V3world = matrixMultiply(obj->worldTransform, V3scale);
                 
-                //printMatrix(V1trans);
+                //printMatrix(V1world);
                 
                 // Kuvakulmamuunnos
                 
-                V1view = matrixMultiply(viewMatrix, V1trans);
-                V2view = matrixMultiply(viewMatrix, V2trans);
-                V3view = matrixMultiply(viewMatrix, V3trans);
+                V1view = matrixMultiply(viewMatrix, V1world);
+                V2view = matrixMultiply(viewMatrix, V2world);
+                V3view = matrixMultiply(viewMatrix, V3world);
                 
                 //printMatrix(V1view);
 
                 // Projektiomuunnos
                 
-                V1 = matrixMultiply(projMatrix, V1trans);
-                V2 = matrixMultiply(projMatrix, V2trans);
-                V3 = matrixMultiply(projMatrix, V3trans);
+                V1 = matrixMultiply(projMatrix, V1view);
+                V2 = matrixMultiply(projMatrix, V2view);
+                V3 = matrixMultiply(projMatrix, V3view);
                 
                 //printMatrix(V1);
 
                 // Poistetaan turhat matriisit
                 
-                deleteMatrix(V1trans);
-                deleteMatrix(V2trans);
-                deleteMatrix(V3trans);
+                deleteMatrix(V1world);
+                deleteMatrix(V2world);
+                deleteMatrix(V3world);
                 
                 deleteMatrix(V1view);
                 deleteMatrix(V2view);
@@ -205,18 +217,17 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
                 matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
                 
-                printMatrix(V1);
-                printMatrix(V2);
-                printMatrix(V3);
+                //printMatrix(V1);
                 
-                // Polygonien kulmapisteet ruudulla
+                // Polygonien kulmapisteet ruudulla, huom! y-koordinaatti
+                // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
 
                 x1 = screenWidth*0.5+(int)(V1->values[0][0]*screenWidth*0.5+0.5);
-                y1 = screenHeight*0.5+(int)(V1->values[1][0]*screenHeight*0.5+0.5);
+                y1 = screenHeight*0.5+(int)(V1->values[2][0]*screenHeight*0.5+0.5);
                 x2 = screenWidth*0.5+(int)(V2->values[0][0]*screenWidth*0.5+0.5);
-                y2 = screenHeight*0.5+(int)(V2->values[1][0]*screenHeight*0.5+0.5);
+                y2 = screenHeight*0.5+(int)(V2->values[2][0]*screenHeight*0.5+0.5);
                 x3 = screenWidth*0.5+(int)(V3->values[0][0]*screenWidth*0.5+0.5);
-                y3 = screenHeight*0.5+(int)(V3->values[1][0]*screenHeight*0.5+0.5);
+                y3 = screenHeight*0.5+(int)(V3->values[2][0]*screenHeight*0.5+0.5);
 
                 // Piirretään viivat
                 
@@ -226,9 +237,9 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 
                 // Piirretään verteksien kohdalle pisteet
                 
-                drawCircle(surface, x1, y1, V1->values[2][0]*5.0, cyan);
-                drawCircle(surface, x2, y2, V2->values[2][0]*5.0, cyan);
-                drawCircle(surface, x3, y3, V3->values[2][0]*5.0, cyan);
+                drawCircle(surface, x1, y1, 5/V1->values[1][0], cyan);
+                drawCircle(surface, x2, y2, 5/V2->values[1][0], cyan);
+                drawCircle(surface, x3, y3, 5/V3->values[1][0], cyan);
 
                 P = P->next;
 

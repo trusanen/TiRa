@@ -1,6 +1,67 @@
 #include "matrix.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <math.h>
+
+#define epsilon 0.01
+
+float absoluteValue(float x) {
+    if(x < 0) {
+        return -x;
+    }
+    return x;
+}
+
+float matrixNorm(matrix* A, matrix* B) {
+    
+    // Palauttaa matriisinormin, jonka avulla voidaan tutkia kahdesta
+    // samankokoisesta matriisista, ovatko ne samat.
+    
+    // Tarkistaa, että annetut matriisit eivät ole tyhjiä.
+    
+    assert(A != NULL && B != NULL);
+    assert(A->rows == B->rows && A->columns == B->columns);
+    
+    float a;
+    float b;
+    float diff = 0;
+    
+    int i = 0;
+    int j = 0;
+    
+    for(i ; i < A->rows ; i++) {
+        for(j ; j < A->columns ; j++) {
+            a = A->values[i][j];
+            b = B->values[i][j];
+            if(absoluteValue(a-b) > diff) {
+                diff = absoluteValue(a-b);
+            }
+        }
+        j = 0;
+    }
+    
+    return diff;
+}
 
 void matrixTest() {
+    
+    // Määritellään vastausmatriisit
+    
+    matrix* sumResult = newMatrix(3, 3);
+    sumResult->values[0][2] = 1.1;
+    sumResult->values[2][0] = 1.1;
+    
+    matrix* mulResult = newMatrix(3,3);
+    mulResult->values[0][0] = 1.1*1.1;
+    
+    matrix* fillResult = newMatrix(2,2);
+    fillResult->values[0][0] = 5.0;
+    fillResult->values[0][1] = 5.0;
+    fillResult->values[1][0] = 5.0;
+    fillResult->values[1][1] = 5.0;
+    
+    // Aloitetaan testit
     
     matrix* A = newMatrix(3,3);
     matrix* B = newMatrix(3,3);
@@ -8,22 +69,15 @@ void matrixTest() {
     A->values[0][2] = 1.1;
     B->values[2][0] = 1.1;
     
-    printMatrix(A);
-    printMatrix(B);
-    
     matrix* C = matrixSum(A,B);
-    
-    printMatrix(C);
+    assert(matrixNorm(C, sumResult) == 0);
     
     matrix* D = matrixMultiply(A,B);
+    assert(matrixNorm(D, mulResult) == 0);
     
-    printMatrix(D);
-    
-    matrix* E = newMatrix(5, 5);
-    
+    matrix* E = newMatrix(2, 2);
     matrixFill(E, 5.0);
-    
-    printMatrix(E);
+    assert(matrixNorm(E, fillResult) == 0);
     
     matrix* vector = newMatrix(3, 1);
     
@@ -50,4 +104,7 @@ void matrixTest() {
     deleteMatrix(vector);
     deleteMatrix(vectorTranspose);
     deleteMatrix(F);
+    
+    deleteMatrix(sumResult);
+    deleteMatrix(mulResult);
 }

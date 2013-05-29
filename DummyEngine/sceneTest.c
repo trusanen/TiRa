@@ -17,6 +17,8 @@ void sceneTest() {
     
     SDL_Delay(5000);
     
+    SDL_SaveBMP(screen, "render.bmp");
+    
     SDL_Quit();
     
 }
