@@ -168,9 +168,9 @@ void addVertex(mesh* M, vertex* V) {
 vertex* meshGetVertex(mesh* M, int n) {
     
     // Palauttaa n:nnen verteksin mallin M verteksilistasta. Jos
-    // n on suurempi kuin verteksien lukumäärä, palauttaa ensimmäiseksi
-    // lisätyn verteksin. Jos n = 0, palauttaa viimeiseksi lisätyn.
-    // Tarkistaa, että malli ei ole tyhjä ja n on positiivinen.
+    // n on suurempi kuin verteksien lukumäärä, palauttaa tyhjän osoittimen.
+    // Jos n = 0, palauttaa viimeiseksi lisätyn. Tarkistaa, että malli 
+    // ei ole tyhjä ja n on positiivinen.
     
     assert(M != NULL && n >= 0);
     

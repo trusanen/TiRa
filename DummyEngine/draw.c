@@ -94,6 +94,14 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
 
 void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color) {
     
+    // Piirtää ympyrän, jonka keskipiste on (x, y) ja säde r. Tarkistaa, että
+    // SDL_Surface-osoitin ei ole tyhjä.
+    
+    // Tässä vaiheessa ympyrä on vielä tiheä kasa pisteitä, tulee paranemaan
+    // jatkossa.
+    
+    assert(surface != NULL);
+    
     int a = (int)(x+0.5);
     int b = (int)(y+0.5);
     
@@ -102,18 +110,6 @@ void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color) {
     for(i ; i < 360 ; i = i + 10) {
         putPixel(surface, a + (r*cos(i*M_PI/180)), b + (r*sin(i*M_PI/180)), color);
     }
-}
-
-void drawMeshWireframe(SDL_Surface* surface, mesh* M) {
-    
-}
-
-void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
-
-}
-
-void drawPolygon(SDL_Surface* surface, polygon* P) {
-    
 }
 
 void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
@@ -235,7 +231,7 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 drawLine(surface, x2, y2, x3, y3, white);
                 drawLine(surface, x3, y3, x1, y1, white);
                 
-                // Piirretään verteksien kohdalle pisteet
+                // Piirretään verteksien kohdalle ympyrät
                 
                 drawCircle(surface, x1, y1, 5/V1->values[1][0], cyan);
                 drawCircle(surface, x2, y2, 5/V2->values[1][0], cyan);

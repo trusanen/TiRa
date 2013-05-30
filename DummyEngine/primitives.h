@@ -8,7 +8,6 @@
 #ifndef PRIMITIVES_H
 #define	PRIMITIVES_H
 
-#include "mesh.h"
 #include "scene.h"
 
 mesh* newUnitCube(scene* scene);
