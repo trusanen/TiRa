@@ -11,6 +11,8 @@ void sceneTest() {
     
     SDL_Init( SDL_INIT_EVERYTHING);
     
+    SDL_WM_SetCaption("Scene test", "Scene test");
+    
     screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
     
     scene* scn = newScene();
@@ -19,7 +21,7 @@ void sceneTest() {
     
     SDL_Flip(screen);
     
-    SDL_Delay(5000);
+    SDL_Delay(2000);
     
     SDL_SaveBMP(screen, "sceneTest.bmp");
     

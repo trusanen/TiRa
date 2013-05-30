@@ -13,6 +13,7 @@
 
 mesh* newUnitCube(scene* scene);
 mesh* newGrid(scene* scene, int x, int y);
+mesh* newCone(scene* scene, int vertices, float height);
 
 #ifdef	__cplusplus
 extern "C" {

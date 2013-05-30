@@ -1,5 +1,6 @@
 #include "scene.h"
 #include <assert.h>
+#include <math.h>
 
 mesh* newUnitCube(scene* scene) {
     
@@ -59,26 +60,73 @@ mesh* newGrid(scene* scene, int x, int y) {
     
     // Luo x*y -ruudukon, tarkistaa, että x ja y ovat suurempia kuin 1
     
-    // KESKEN, VIIMEISTELE!
-    
     assert(x > 0 && y > 0);
     
     mesh* grid = sceneNewMesh(scene);
     
-    vertex* NW = meshNewVertex(grid, 0, 0, 0);
-    vertex* SW = meshNewVertex(grid, 0, 1, 0);
-    vertex* NE = meshNewVertex(grid, 1, 1, 0);
-    vertex* SE = NULL;
-    
     int i = 0;
     int j = 0;
     
-    for(i ; i < x ; i++) {
-        for(j ; j < y ; j++) {
+    for(j ; j <= y ; j++) {
+        for(i ; i <= x ; i++) {
             meshNewVertex(grid, i, j, 0);
         }
-        j = 0;
+        i = 0;
+    }
+    
+    vertex* NW;
+    vertex* NE;
+    vertex* SE;
+    vertex* SW;
+    
+    i = 0;
+    j = 0;
+    
+    for(j ; j < y ; j++) {
+        for(i ; i < x ; i++) {
+            NE = meshGetVertex(grid, (x+1)*j+i);
+            NW = meshGetVertex(grid, (x+1)*j+i+1);
+            SE = meshGetVertex(grid, (x+1)*(j+1)+i);
+            SW = meshGetVertex(grid, (x+1)*(j+1)+i+1);
+            meshNewPolygon(grid, NE, NW, SW);
+            meshNewPolygon(grid, SW, SE, NE);
+        }
+        i = 0;
     }
     
     return grid;
+}
+
+mesh* newCone(scene* scene, int vertices, float height) {
+    
+    // Luo kartion, jonka kannassa on vertices-määrä verteksejä ja
+    // sen korkeus on height. Tarkistaa, että scene ei ole tyhjä osoitin
+    // ja verteksejä on enemmän kuin 3.
+    
+    assert(scene != NULL && vertices > 2);
+    
+    mesh* cone = sceneNewMesh(scene);
+    
+    vertex* top = meshNewVertex(cone, 0, 0, height);
+    vertex* bottom = meshNewVertex(cone, 0, 0, 0);
+    vertex* start = meshNewVertex(cone, 1, 0, 0);
+    
+    vertex* first = start;
+    vertex* new;
+    
+    float angle = 2*M_PI/vertices;
+    
+    int i = 1;
+    
+    for(i ; i < vertices ; i++) {
+        new = meshNewVertex(cone, cos(i*angle), sin(i*angle), 0);
+        meshNewPolygon(cone, first, new, top);
+        meshNewPolygon(cone, first, new, bottom);
+        first = new;
+    }
+    
+    meshNewPolygon(cone, first, start, top);
+    meshNewPolygon(cone, first, start, bottom);
+    
+    return cone;
 }

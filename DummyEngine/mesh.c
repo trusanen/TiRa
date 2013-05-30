@@ -63,6 +63,8 @@ polygon* meshNewPolygon(mesh* M, vertex* A, vertex* B, vertex* C) {
     P->verts[1] = B;
     P->verts[2] = C;
     
+    P->color = 0x00ffffff;
+    
     P->next = NULL;
     P->prev = NULL;
     
@@ -165,7 +167,9 @@ void addVertex(mesh* M, vertex* V) {
 
 vertex* meshGetVertex(mesh* M, int n) {
     
-    // Palauttaa n:nnen verteksin mallin M verteksilistasta.
+    // Palauttaa n:nnen verteksin mallin M verteksilistasta. Jos
+    // n on suurempi kuin verteksien lukumäärä, palauttaa ensimmäiseksi
+    // lisätyn verteksin. Jos n = 0, palauttaa viimeiseksi lisätyn.
     // Tarkistaa, että malli ei ole tyhjä ja n on positiivinen.
     
     assert(M != NULL && n >= 0);
@@ -173,7 +177,7 @@ vertex* meshGetVertex(mesh* M, int n) {
     vertex* V = M->vertices;
     int i = 0;
     
-    while(i <= n) {
+    while(i < n) {
         if(V != NULL) {
             V = V->next;
             i++;

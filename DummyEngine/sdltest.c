@@ -13,6 +13,8 @@ sdlTest() {
     
     SDL_Init( SDL_INIT_EVERYTHING);
     
+    SDL_WM_SetCaption("SDL test", "SDL test");
+    
     screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
     
     int i = 0;
