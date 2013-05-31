@@ -170,23 +170,17 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 V2scale = matrixMultiply(obj->scaleTransform, P->verts[1]->coords);
                 V3scale = matrixMultiply(obj->scaleTransform, P->verts[2]->coords);
                 
-                //printMatrix(V1scale);
-                
                 // Maailmamuunnos
                 
                 V1world = matrixMultiply(obj->worldTransform, V1scale);
                 V2world = matrixMultiply(obj->worldTransform, V2scale);
                 V3world = matrixMultiply(obj->worldTransform, V3scale);
                 
-                //printMatrix(V1world);
-                
                 // Kuvakulmamuunnos
                 
                 V1view = matrixMultiply(viewMatrix, V1world);
                 V2view = matrixMultiply(viewMatrix, V2world);
                 V3view = matrixMultiply(viewMatrix, V3world);
-                
-                //printMatrix(V1view);
 
                 // Projektiomuunnos
                 
@@ -194,26 +188,12 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 V2 = matrixMultiply(projMatrix, V2view);
                 V3 = matrixMultiply(projMatrix, V3view);
                 
-                //printMatrix(V1);
-
-                // Poistetaan turhat matriisit
-                
-                deleteMatrix(V1world);
-                deleteMatrix(V2world);
-                deleteMatrix(V3world);
-                
-                deleteMatrix(V1view);
-                deleteMatrix(V2view);
-                deleteMatrix(V3view);
-                
                 // Koordinaattien palauttaminen w = 1 avaruuteen,
                 // ns. "Perspective divide"
 
                 matrixMultiplyScalar(V1, 1.0/V1->values[3][0]);
                 matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
                 matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
-                
-                //printMatrix(V1);
                 
                 // Polygonien kulmapisteet ruudulla, huom! y-koordinaatti
                 // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
@@ -238,7 +218,21 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 drawCircle(surface, x3, y3, 5/V3->values[1][0], cyan);
 
                 P = P->next;
+                
+                // Poistetaan turhat matriisit
 
+                deleteMatrix(V1scale);
+                deleteMatrix(V2scale);
+                deleteMatrix(V3scale);
+                
+                deleteMatrix(V1world);
+                deleteMatrix(V2world);
+                deleteMatrix(V3world);
+                
+                deleteMatrix(V1view);
+                deleteMatrix(V2view);
+                deleteMatrix(V3view);
+                
                 deleteMatrix(V1);
                 deleteMatrix(V2);
                 deleteMatrix(V3);

@@ -162,30 +162,6 @@ camera* sceneNewCamera(scene* scene, object* obj) {
     cam->perspectiveMatrix->values[1][3] = -(far*near)/(far-near);
     cam->perspectiveMatrix->values[3][1] = 1;
     
-/*
-    // Määritellään näkymän rajat
-    
-    float Pfar = 5.0;
-    float Pnear = 1.0;
-    float Pright = -5.0;
-    float Pleft = 5.0;
-    float Ptop = 5.0;
-    float Pbottom = -5.0;
-    
-    // Lasketaan projektiomatriisi
-    
-    cam->perspectiveMatrix = newMatrix(4, 4);
-    matrixFill(cam->perspectiveMatrix, 0);
-    
-    cam->perspectiveMatrix->values[0][0] = (2*Pnear)/(Pright-Pleft);
-    cam->perspectiveMatrix->values[1][1] = (2*Pnear)/(Ptop-Pbottom);
-    cam->perspectiveMatrix->values[0][2] = (Pright + Pleft)/(Pright - Pleft);
-    cam->perspectiveMatrix->values[1][2] = (Ptop + Pbottom)/(Ptop - Pbottom);
-    cam->perspectiveMatrix->values[2][2] = -1*(Pfar+Pnear)/(Pfar-Pnear);
-    cam->perspectiveMatrix->values[3][2] = -1;
-    cam->perspectiveMatrix->values[2][3] = (-2*Pfar*Pnear)/(Pfar-Pnear);
-*/
-    
     if(scene->camera != NULL) {
         deleteCamera(scene->camera);
     }
