@@ -19,7 +19,10 @@ void drawLine(SDL_Surface* surface, float startX, float startY, float endX, floa
 void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color);
 
 void drawPolygon(SDL_Surface* surface, polygon* P);
-void drawPolygonWireframe(SDL_Surface* surface, polygon* P);
+void drawPolygonWireframe(SDL_Surface* surface, 
+        float x1, float y1,
+        float x2, float y2,
+        float x3, float y3);
 void drawMeshWireframe(SDL_Surface* surface, mesh* M);
 
 void drawSceneWireframe(SDL_Surface* surface, scene* scene);

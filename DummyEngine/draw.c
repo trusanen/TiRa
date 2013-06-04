@@ -113,6 +113,33 @@ void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color) {
     }
 }
 
+void drawPolygonWireframe(SDL_Surface* surface,
+        float x1, float y1,
+        float x2, float y2,
+        float x3, float y3) {
+    
+    // Funktio piirtää kolmion ääriviivat, tarkistaa, että
+    // pinnan osoitin ei ole tyhjä.
+    
+    assert(surface != NULL);
+    
+    Uint32 white = 0xffffffff;
+    Uint32 magenta = 0x00ff00ff;
+    
+    // Piirretään viivat
+                
+    drawLine(surface, x1, y1, x2, y2, white);
+    drawLine(surface, x2, y2, x3, y3, white);
+    drawLine(surface, x3, y3, x1, y1, white);
+
+    // Piirretään verteksien kohdalle ympyrät
+
+    drawCircle(surface, x1, y1, 5, magenta);
+    drawCircle(surface, x2, y2, 5, magenta);
+    drawCircle(surface, x3, y3, 5, magenta);
+    
+}
+
 void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
     
     // Piirtää tilan wireframe-muodossa. Tarkistaa, että argumentit
@@ -128,22 +155,17 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
     matrix* viewMatrix = getViewMatrix(scene->camera);
     matrix* projMatrix = scene->camera->perspectiveMatrix;
     
+    matrix* world;
+    matrix* camMatrix;
+    matrix* fullTransform;
+    
+    int screenWidth = surface->w;
+    int screenHeight = surface->h;
+    
     object* obj = scene->objects;
     
     while(obj != NULL) {
         if(obj->mesh != NULL) {
-            
-            matrix* V1scale;
-            matrix* V2scale;
-            matrix* V3scale;
-            
-            matrix* V1world;
-            matrix* V2world;
-            matrix* V3world;
-            
-            matrix* V1view;
-            matrix* V2view;
-            matrix* V3view;
             
             matrix* V1;
             matrix* V2;
@@ -155,39 +177,22 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
             int y2;
             int x3;
             int y3;
-
-            Uint32 white = 0xffffffff;
-            Uint32 cyan = 0x00ff00ff;
-            int screenWidth = surface->w;
-            int screenHeight = surface->h;
+            
+            // Lasketaan objektikohtainen muunnosmatriisi
+            
+            camMatrix = matrixMultiply(projMatrix, viewMatrix);
+            world = matrixMultiply(camMatrix, obj->worldTransform);
+            fullTransform = matrixMultiply(world, obj->scaleTransform);
             
             polygon* P = obj->mesh->polygons;
             
             while(P != NULL) {
                 
-                // Skaalaus
+                // Muunnetaan koordinaatit leikkausavaruuteen (clip space)
                 
-                V1scale = matrixMultiply(obj->scaleTransform, P->verts[0]->coords);
-                V2scale = matrixMultiply(obj->scaleTransform, P->verts[1]->coords);
-                V3scale = matrixMultiply(obj->scaleTransform, P->verts[2]->coords);
-                
-                // Maailmamuunnos
-                
-                V1world = matrixMultiply(obj->worldTransform, V1scale);
-                V2world = matrixMultiply(obj->worldTransform, V2scale);
-                V3world = matrixMultiply(obj->worldTransform, V3scale);
-                
-                // Kuvakulmamuunnos
-                
-                V1view = matrixMultiply(viewMatrix, V1world);
-                V2view = matrixMultiply(viewMatrix, V2world);
-                V3view = matrixMultiply(viewMatrix, V3world);
-
-                // Projektiomuunnos
-                
-                V1 = matrixMultiply(projMatrix, V1view);
-                V2 = matrixMultiply(projMatrix, V2view);
-                V3 = matrixMultiply(projMatrix, V3view);
+                V1 = matrixMultiply(fullTransform, P->verts[0]->coords);
+                V2 = matrixMultiply(fullTransform, P->verts[1]->coords);
+                V3 = matrixMultiply(fullTransform, P->verts[2]->coords);
                 
                 // Koordinaattien palauttaminen w = 1 avaruuteen,
                 // ns. "Perspective divide"
@@ -198,48 +203,32 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 
                 // Polygonien kulmapisteet ruudulla. Huom! y-koordinaatti
                 // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
-
+                
                 x1 = screenWidth*0.5+(int)(V1->values[0][0]*screenWidth*0.5+0.5);
                 y1 = screenHeight*0.5+(int)(V1->values[2][0]*screenHeight*0.5+0.5);
                 x2 = screenWidth*0.5+(int)(V2->values[0][0]*screenWidth*0.5+0.5);
                 y2 = screenHeight*0.5+(int)(V2->values[2][0]*screenHeight*0.5+0.5);
                 x3 = screenWidth*0.5+(int)(V3->values[0][0]*screenWidth*0.5+0.5);
                 y3 = screenHeight*0.5+(int)(V3->values[2][0]*screenHeight*0.5+0.5);
-
-                // Piirretään viivat
                 
-                drawLine(surface, x1, y1, x2, y2, white);
-                drawLine(surface, x2, y2, x3, y3, white);
-                drawLine(surface, x3, y3, x1, y1, white);
-                
-                // Piirretään verteksien kohdalle ympyrät
-                
-                drawCircle(surface, x1, y1, 5/V1->values[1][0], cyan);
-                drawCircle(surface, x2, y2, 5/V2->values[1][0], cyan);
-                drawCircle(surface, x3, y3, 5/V3->values[1][0], cyan);
+                drawPolygonWireframe(surface, 
+                        x1, y1,
+                        x2, y2,
+                        x3, y3);
 
                 P = P->next;
                 
                 // Poistetaan turhat matriisit
-
-                deleteMatrix(V1scale);
-                deleteMatrix(V2scale);
-                deleteMatrix(V3scale);
-                
-                deleteMatrix(V1world);
-                deleteMatrix(V2world);
-                deleteMatrix(V3world);
-                
-                deleteMatrix(V1view);
-                deleteMatrix(V2view);
-                deleteMatrix(V3view);
                 
                 deleteMatrix(V1);
                 deleteMatrix(V2);
                 deleteMatrix(V3);
             }
+            
+            deleteMatrix(camMatrix);
+            deleteMatrix(world);
+            deleteMatrix(fullTransform);
         }
         obj = obj->next;
-    }
-    
+    }   
 }

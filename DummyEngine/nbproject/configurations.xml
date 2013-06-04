@@ -19,6 +19,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="Testing" projectFiles="true">
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/backfaceCullingTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrixTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/meshTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/sceneTest.c</itemPath>
