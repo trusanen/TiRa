@@ -65,6 +65,8 @@ polygon* meshNewPolygon(mesh* M, vertex* A, vertex* B, vertex* C) {
     
     P->color = 0x00ffffff;
     
+    P->normal = calculatePolygonNormal(P);
+    
     P->next = NULL;
     P->prev = NULL;
     
@@ -89,6 +91,8 @@ void deletePolygon(polygon* P) {
         Pprev->next = Pnext;
     }
     
+    deleteMatrix(P->normal);
+    
     free(P);
 }
 
@@ -104,6 +108,51 @@ void setPolygonColor(polygon* P, Uint32 color) {
     
     P->color = color;
     
+}
+
+matrix* calculatePolygonNormal(polygon* P) {
+    
+    // Laskee polygonin normaalin ja sijoittaa sen polygonin keskelle.
+    // Verteksien tulee olla määritelty myötäpäivään pinnan normaalin
+    // suhteen. Tarkistaa, että osoitin ei ole tyhjä.
+    
+    assert(P != NULL);
+    
+    matrix* u = newMatrix(3,1);
+    matrix* v = newMatrix(3,1);
+    
+    // Määritellään vektorit u ja v, jotka määrittävät tason
+    
+    u->values[0][0] = P->verts[1]->coords->values[0][0] 
+            - P->verts[0]->coords->values[0][0];
+    u->values[1][0] = P->verts[1]->coords->values[1][0] 
+            - P->verts[0]->coords->values[1][0];
+    u->values[2][0] = P->verts[1]->coords->values[2][0] 
+            - P->verts[0]->coords->values[2][0];
+    
+    v->values[0][0] = P->verts[2]->coords->values[0][0] 
+            - P->verts[1]->coords->values[0][0];
+    v->values[1][0] = P->verts[2]->coords->values[1][0] 
+            - P->verts[1]->coords->values[1][0];
+    v->values[2][0] = P->verts[2]->coords->values[2][0] 
+            - P->verts[1]->coords->values[2][0];
+    
+    // Lasketaan normaali
+    
+    matrix* normal = newMatrix(4, 1);
+    
+    normal->values[0][0] = u->values[1][0]*v->values[2][0] 
+            - u->values[2][0]*v->values[1][0];
+    normal->values[1][0] = u->values[2][0]*v->values[0][0] 
+            - u->values[0][0]*v->values[2][0];
+    normal->values[2][0] = u->values[0][0]*v->values[1][0] 
+            - u->values[1][0]*v->values[0][0];
+    normal->values[3][0] = 1;
+    
+    deleteMatrix(u);
+    deleteMatrix(v);
+    
+    return normal;
 }
 
 void deleteMesh(mesh* M) {

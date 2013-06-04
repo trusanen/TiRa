@@ -22,6 +22,7 @@ typedef struct vertex_t {
 typedef struct polygon_t {
     vertex* verts[3];
     Uint32 color;
+    matrix* normal;
     struct polygon_t* next;
     struct polygon_t* prev;
 } polygon;
@@ -39,6 +40,7 @@ void deleteVertex(vertex* V);
 polygon* meshNewPolygon(mesh* M, vertex* A, vertex* B, vertex* C);
 void deletePolygon(polygon* P);
 void setPolygonColor(polygon* P, Uint32 color);
+matrix* calculatePolygonNormal(polygon* P);
 
 void deleteMesh(mesh* M);
 void addVertex(mesh* M, vertex* V);

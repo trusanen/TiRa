@@ -2,6 +2,7 @@
 #include "scene.h"
 #include <math.h>
 #include <assert.h>
+#include <stdlib.h>
 
 void putPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
     
@@ -195,7 +196,7 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
                 matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
                 
-                // Polygonien kulmapisteet ruudulla, huom! y-koordinaatti
+                // Polygonien kulmapisteet ruudulla. Huom! y-koordinaatti
                 // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
 
                 x1 = screenWidth*0.5+(int)(V1->values[0][0]*screenWidth*0.5+0.5);

@@ -23,6 +23,7 @@ void matrixMultiplyScalar(matrix* A, float scalar);
 matrix* matrixSum(matrix* A, matrix* B);
 matrix* matrixMultiply(matrix* A, matrix* B);
 matrix* matrixTranspose(matrix* A);
+float matrixDotProd(matrix* u, matrix* v);
 
 #ifdef	__cplusplus
 extern "C" {
