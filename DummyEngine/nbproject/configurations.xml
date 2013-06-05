@@ -22,6 +22,7 @@
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/backfaceCullingTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrixTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/meshTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/normalTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/sceneTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/sdltest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/testMain.c</itemPath>

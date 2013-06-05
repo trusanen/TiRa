@@ -197,10 +197,6 @@ scene* newScene() {
     object* unitCube = sceneNewObject(scene);
     unitCube->mesh = newUnitCube(scene);
     
-    objectScale(unitCube, 5, 1, 1);
-    objectRotate(unitCube, 0, 0, M_PI/2);
-    objectTranslate(unitCube, 3, -3, 3);
-    
     object* cam = sceneNewObject(scene);
     
     objectTranslate(cam, 10, -10, 10);

@@ -49,8 +49,8 @@ mesh* newUnitCube(scene* scene) {
     setPolygonColor(top1, 0x0f0f0f00);
     setPolygonColor(top2, 0x0f0f0f00);
     
-    polygon* bottom1 = meshNewPolygon(unitCube, NEL, SEL, SWL);
-    polygon* bottom2 = meshNewPolygon(unitCube, SWL, NWL, NEL);
+    polygon* bottom1 = meshNewPolygon(unitCube, SWL, SEL, NEL);
+    polygon* bottom2 = meshNewPolygon(unitCube, NEL, NWL, SWL);
     setPolygonColor(bottom1, 0xffffff00);
     setPolygonColor(bottom2, 0xffffff00);
     
@@ -89,8 +89,8 @@ mesh* newGrid(scene* scene, int x, int y) {
             NW = meshGetVertex(grid, (x+1)*j+i+1);
             SE = meshGetVertex(grid, (x+1)*(j+1)+i);
             SW = meshGetVertex(grid, (x+1)*(j+1)+i+1);
-            meshNewPolygon(grid, NE, NW, SW);
-            meshNewPolygon(grid, SW, SE, NE);
+            meshNewPolygon(grid, NW, NE, SE);
+            meshNewPolygon(grid, SE, SW, NW);
         }
         i = 0;
     }
@@ -121,12 +121,12 @@ mesh* newCone(scene* scene, int vertices, float height) {
     
     for(i ; i < vertices ; i++) {
         new = meshNewVertex(cone, cos(i*angle), sin(i*angle), 0);
-        meshNewPolygon(cone, first, new, top);
+        meshNewPolygon(cone, new, first, top);
         meshNewPolygon(cone, first, new, bottom);
         first = new;
     }
     
-    meshNewPolygon(cone, first, start, top);
+    meshNewPolygon(cone, start, first, top);
     meshNewPolygon(cone, first, start, bottom);
     
     return cone;

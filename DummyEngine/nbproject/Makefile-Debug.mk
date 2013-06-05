@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/73483906/matrix.o \
 	${OBJECTDIR}/_ext/73483906/backfaceCullingTest.o \
 	${OBJECTDIR}/_ext/73483906/matrixTest.o \
+	${OBJECTDIR}/_ext/73483906/normalTest.o \
 	${OBJECTDIR}/_ext/73483906/scene.o \
 	${OBJECTDIR}/_ext/73483906/codeSnippets.o \
 	${OBJECTDIR}/_ext/73483906/mesh.o \
@@ -112,6 +113,11 @@ ${OBJECTDIR}/_ext/73483906/matrixTest.o: /home/topias/TiRa/TiRa/DummyEngine/matr
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
 	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/matrixTest.o /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c
+
+${OBJECTDIR}/_ext/73483906/normalTest.o: /home/topias/TiRa/TiRa/DummyEngine/normalTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/normalTest.o /home/topias/TiRa/TiRa/DummyEngine/normalTest.c
 
 ${OBJECTDIR}/_ext/73483906/scene.o: /home/topias/TiRa/TiRa/DummyEngine/scene.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906

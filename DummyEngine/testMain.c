@@ -1,6 +1,8 @@
 void runTests() {
     matrixTest();
     
+    normalTest();
+    
     sdlTest();
             
     sceneTest();

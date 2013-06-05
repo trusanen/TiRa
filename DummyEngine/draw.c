@@ -164,7 +164,7 @@ int doBackfaceCulling(camera* cam, polygon* P) {
     
     float dotProduct = vectorDotProduct(camToPolygon, P->normal);
     
-    if(dotProduct <= 0) {
+    if(dotProduct >= 0) {
         return 1;
     }
     return 0;
