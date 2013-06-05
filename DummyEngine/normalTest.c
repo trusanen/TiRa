@@ -3,7 +3,15 @@
 
 void normalTest() {
     
-    // Testataan pinnan normaalien laskemista
+    // Tämä testaa pinnan normaalien laskemista. Se luo perustilan,
+    // josta se ottaa yksikkökuution viimeisimmän polygonin,
+    // joka on toinen pohjatasoista. Tämän normaalin tulisi olla
+    // vektori
+    
+    //     [ 0 ]
+    // n = [ 0 ]
+    //     [ 4 ]
+    //     [ 1 ]
     
     scene* scn = newScene();
     

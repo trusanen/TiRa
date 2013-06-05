@@ -6,9 +6,11 @@
 
 void backfaceCullingTest() {
     
-    // Tällä testataan tilan luomisen toimivuutta, funktion pitäisi
-    // luoda normaali tila, jossa y-akselin suuntaista palkkia kuvataan
-    // yläviistosta. Kuva piirretään wireframe-muodossa ja tallennetaan.
+    // Tällä testataan niiden polygonien leikkaamista pois kuvasta,
+    // jotka eivät osoita kameraan päin. Kuvan pitäisi olla sama,
+    // kuin edellisessä testissä, mutta kaikki polygonit kuutiosta
+    // ja kartiosta, jotka jäävät muiden polygonien peittoon,
+    // tulisi olla poistettu.
     
     SDL_Surface* screen = NULL;
     
@@ -42,11 +44,6 @@ void backfaceCullingTest() {
     cone->mesh = M3;
     
     objectTranslate(cone, 7, -7, 0);
-    
-    object* cam = scn->camera->cameraObj;
-    
-    objectTranslate(cam, 10, -10, -10);
-    objectRotate(cam, M_PI/4, 0, M_PI/4);
     
     drawSceneWireframeBackfaceCulling(screen, scn);
     

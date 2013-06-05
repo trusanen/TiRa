@@ -15,6 +15,7 @@ struct scene;
 
 typedef struct vertex_t {
     matrix* coords;
+    matrix* NDC; // Normalized Device Coordinates
     struct vertex_t* next;
     struct vertex_t* prev;
 } vertex;
@@ -41,6 +42,7 @@ polygon* meshNewPolygon(mesh* M, vertex* A, vertex* B, vertex* C);
 void deletePolygon(polygon* P);
 void setPolygonColor(polygon* P, Uint32 color);
 matrix* calculatePolygonNormal(polygon* P);
+void transformPolygon(polygon* P, matrix* fullTransform);
 
 void deleteMesh(mesh* M);
 void addVertex(mesh* M, vertex* V);

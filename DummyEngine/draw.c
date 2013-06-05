@@ -113,18 +113,28 @@ void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color) {
     }
 }
 
-void drawPolygonWireframe(SDL_Surface* surface,
-        float x1, float y1,
-        float x2, float y2,
-        float x3, float y3) {
+void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
     
-    // Funktio piirtää kolmion ääriviivat, tarkistaa, että
+    // Funktio piirtää polygonin ääriviivat, tarkistaa, että-
     // pinnan osoitin ei ole tyhjä.
     
     assert(surface != NULL);
     
+    int screenWidth = surface->w;
+    int screenHeight = surface->h;
+    
     Uint32 white = 0xffffffff;
     Uint32 magenta = 0x00ff00ff;
+    
+    // Polygonien kulmapisteet ruudulla. Huom! y-koordinaatti
+    // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
+
+    int x1 = screenWidth*0.5+(int)(P->verts[0]->NDC->values[0][0]*screenWidth*0.5+0.5);
+    int y1 = screenHeight*0.5+(int)(P->verts[0]->NDC->values[2][0]*screenHeight*0.5+0.5);
+    int x2 = screenWidth*0.5+(int)(P->verts[1]->NDC->values[0][0]*screenWidth*0.5+0.5);
+    int y2 = screenHeight*0.5+(int)(P->verts[1]->NDC->values[2][0]*screenHeight*0.5+0.5);
+    int x3 = screenWidth*0.5+(int)(P->verts[2]->NDC->values[0][0]*screenWidth*0.5+0.5);
+    int y3 = screenHeight*0.5+(int)(P->verts[2]->NDC->values[2][0]*screenHeight*0.5+0.5);
     
     // Piirretään viivat
                 
@@ -182,35 +192,25 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
         return;
     }
     
+    // Lasketaan kameramatriisi
+    
+    matrix* camMatrix;
+    
     matrix* viewMatrix = getViewMatrix(scene->camera);
     matrix* projMatrix = scene->camera->perspectiveMatrix;
     
-    matrix* world;
-    matrix* camMatrix;
-    matrix* fullTransform;
+    camMatrix = matrixMultiply(projMatrix, viewMatrix);
     
-    int screenWidth = surface->w;
-    int screenHeight = surface->h;
+    matrix* world;
+    matrix* fullTransform;
     
     object* obj = scene->objects;
     
     while(obj != NULL) {
         if(obj->mesh != NULL) {
             
-            matrix* V1;
-            matrix* V2;
-            matrix* V3;
-            
-            int x1;
-            int y1;
-            int x2;
-            int y2;
-            int x3;
-            int y3;
-            
             // Lasketaan objektikohtainen muunnosmatriisi
             
-            camMatrix = matrixMultiply(projMatrix, viewMatrix);
             world = matrixMultiply(camMatrix, obj->worldTransform);
             fullTransform = matrixMultiply(world, obj->scaleTransform);
             
@@ -218,55 +218,32 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
             
             while(P != NULL) {
                 
-                // Muunnetaan koordinaatit leikkausavaruuteen (clip space)
+                // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
                 
-                V1 = matrixMultiply(fullTransform, P->verts[0]->coords);
-                V2 = matrixMultiply(fullTransform, P->verts[1]->coords);
-                V3 = matrixMultiply(fullTransform, P->verts[2]->coords);
+                transformPolygon(P, fullTransform);
                 
-                // Koordinaattien palauttaminen w = 1 avaruuteen,
-                // ns. "Perspective divide"
-
-                matrixMultiplyScalar(V1, 1.0/V1->values[3][0]);
-                matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
-                matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
+                // Piirretään polygoni
                 
-                // Polygonien kulmapisteet ruudulla. Huom! y-koordinaatti
-                // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
-                
-                x1 = screenWidth*0.5+(int)(V1->values[0][0]*screenWidth*0.5+0.5);
-                y1 = screenHeight*0.5+(int)(V1->values[2][0]*screenHeight*0.5+0.5);
-                x2 = screenWidth*0.5+(int)(V2->values[0][0]*screenWidth*0.5+0.5);
-                y2 = screenHeight*0.5+(int)(V2->values[2][0]*screenHeight*0.5+0.5);
-                x3 = screenWidth*0.5+(int)(V3->values[0][0]*screenWidth*0.5+0.5);
-                y3 = screenHeight*0.5+(int)(V3->values[2][0]*screenHeight*0.5+0.5);
-                
-                drawPolygonWireframe(surface, 
-                        x1, y1,
-                        x2, y2,
-                        x3, y3);
+                drawPolygonWireframe(surface, P);
 
                 P = P->next;
-                
-                // Poistetaan turhat matriisit
-                
-                deleteMatrix(V1);
-                deleteMatrix(V2);
-                deleteMatrix(V3);
             }
             
-            deleteMatrix(camMatrix);
             deleteMatrix(world);
             deleteMatrix(fullTransform);
         }
+        
         obj = obj->next;
-    }   
+    }
+    
+    deleteMatrix(camMatrix);
 }
 
 void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
     
-    // Piirtää tilan wireframe-muodossa. Tarkistaa, että argumentit
-    // eivät ole tyhjiä.
+    // Piirtää tilan wireframe-muodossa, poistaa kaikki pinnat, jotka
+    // eivät osoita kameraan päin. Tarkistaa, että argumentit
+    // eivät ole tyhjiä osoittimia.
     
     assert(surface != NULL && scene != NULL);
     
@@ -275,35 +252,25 @@ void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
         return;
     }
     
+    // Lasketaan kameramatriisi
+    
+    matrix* camMatrix;
+    
     matrix* viewMatrix = getViewMatrix(scene->camera);
     matrix* projMatrix = scene->camera->perspectiveMatrix;
     
-    matrix* world;
-    matrix* camMatrix;
-    matrix* fullTransform;
+    camMatrix = matrixMultiply(projMatrix, viewMatrix);
     
-    int screenWidth = surface->w;
-    int screenHeight = surface->h;
+    matrix* world;
+    matrix* fullTransform;
     
     object* obj = scene->objects;
     
     while(obj != NULL) {
         if(obj->mesh != NULL) {
             
-            matrix* V1;
-            matrix* V2;
-            matrix* V3;
-            
-            int x1;
-            int y1;
-            int x2;
-            int y2;
-            int x3;
-            int y3;
-            
             // Lasketaan objektikohtainen muunnosmatriisi
             
-            camMatrix = matrixMultiply(projMatrix, viewMatrix);
             world = matrixMultiply(camMatrix, obj->worldTransform);
             fullTransform = matrixMultiply(world, obj->scaleTransform);
             
@@ -313,49 +280,23 @@ void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
                 
                 if(doBackfaceCulling(scene->camera, P)) {
                     
-                    // Muunnetaan koordinaatit leikkausavaruuteen (clip space)
+                    // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
 
-                    V1 = matrixMultiply(fullTransform, P->verts[0]->coords);
-                    V2 = matrixMultiply(fullTransform, P->verts[1]->coords);
-                    V3 = matrixMultiply(fullTransform, P->verts[2]->coords);
+                    transformPolygon(P, fullTransform);
 
-                    // Koordinaattien palauttaminen w = 1 avaruuteen,
-                    // ns. "Perspective divide"
+                    // Piirretään polygoni
 
-                    matrixMultiplyScalar(V1, 1.0/V1->values[3][0]);
-                    matrixMultiplyScalar(V2, 1.0/V2->values[3][0]);
-                    matrixMultiplyScalar(V3, 1.0/V3->values[3][0]);
-
-                    // Polygonien kulmapisteet ruudulla. Huom! y-koordinaatti
-                    // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
-
-                    x1 = screenWidth*0.5+(int)(V1->values[0][0]*screenWidth*0.5+0.5);
-                    y1 = screenHeight*0.5+(int)(V1->values[2][0]*screenHeight*0.5+0.5);
-                    x2 = screenWidth*0.5+(int)(V2->values[0][0]*screenWidth*0.5+0.5);
-                    y2 = screenHeight*0.5+(int)(V2->values[2][0]*screenHeight*0.5+0.5);
-                    x3 = screenWidth*0.5+(int)(V3->values[0][0]*screenWidth*0.5+0.5);
-                    y3 = screenHeight*0.5+(int)(V3->values[2][0]*screenHeight*0.5+0.5);
-
-                    drawPolygonWireframe(surface, 
-                            x1, y1,
-                            x2, y2,
-                            x3, y3);
-
-                    // Poistetaan turhat matriisit
-
-                    deleteMatrix(V1);
-                    deleteMatrix(V2);
-                    deleteMatrix(V3);
-                    
+                    drawPolygonWireframe(surface, P);
                 }
                 
                 P = P->next;
             }
             
-            deleteMatrix(camMatrix);
             deleteMatrix(world);
             deleteMatrix(fullTransform);
         }
         obj = obj->next;
-    }   
+    }
+    
+    deleteMatrix(camMatrix);
 }

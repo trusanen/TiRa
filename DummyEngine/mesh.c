@@ -21,6 +21,8 @@ vertex* meshNewVertex(mesh* M, float x, float y, float z) {
     V->coords->values[2][0] = z;
     V->coords->values[3][0] = 1;
     
+    V->NDC = NULL;
+    
     V->next = NULL;
     V->prev = NULL;
     
@@ -46,6 +48,10 @@ void deleteVertex(vertex* V) {
     }
     
     deleteMatrix(V->coords);
+    
+    if(V->NDC != NULL) {
+        deleteMatrix(V->NDC);
+    }
     
     free(V);
 }
@@ -153,6 +159,36 @@ matrix* calculatePolygonNormal(polygon* P) {
     deleteMatrix(v);
     
     return normal;
+}
+
+void transformPolygon(polygon* P, matrix* fullTransform) {
+    
+    // Laskee polygonin verteksien koordinaatit näytöllä 
+    // (NDC = Normalized Device Coordinates). Tarkistaa,
+    // että annetut osoittimet eivät ole tyhjiä.
+    
+    assert(P != NULL && fullTransform != NULL);
+    
+    int i = 0;
+    
+    for(i ; i < 3 ; i++) {
+        
+        // Poistetaan edellinen NDC-koordinaattivektori
+        
+        if(P->verts[i]->NDC != NULL) {
+            deleteMatrix(P->verts[i]->NDC);
+            P->verts[i]->NDC = NULL;
+        }
+        
+        // Muunnetaan koordinaatit leikkausavaruuteen (clip space)
+        
+        P->verts[i]->NDC = matrixMultiply(fullTransform, P->verts[i]->coords);
+        
+        // Koordinaattien palauttaminen w = 1 avaruuteen,
+        // ns. "Perspective divide"
+        
+        matrixMultiplyScalar(P->verts[i]->NDC, 1.0/P->verts[i]->NDC->values[3][0]);   
+    }
 }
 
 void deleteMesh(mesh* M) {
