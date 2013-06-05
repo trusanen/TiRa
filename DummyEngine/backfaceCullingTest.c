@@ -1,6 +1,7 @@
 #include "SDL/SDL.h"
 #include <stdlib.h>
 #include "scene.h"
+#include <math.h>
 
 void backfaceCullingTest() {
     
@@ -18,11 +19,19 @@ void backfaceCullingTest() {
     
     scene* scn = newScene();
     
-    drawSceneWireframe(screen, scn);
+    object* unitCube = scn->objects->next;
+    
+    /*
+    objectScale(unitCube, 1/5, 1, 1);
+    objectRotate(unitCube, 0, 0, -M_PI/2);
+    objectTranslate(unitCube, -3, 3, -3);
+    */
+    
+    drawSceneWireframeBackfaceCulling(screen, scn);
     
     SDL_Flip(screen);
     
-    SDL_Delay(2000);
+    SDL_Delay(5000);
     
     SDL_SaveBMP(screen, "cullingTest.bmp");
     

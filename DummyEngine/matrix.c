@@ -213,18 +213,20 @@ matrix* matrixTranspose(matrix* A) {
     return AT;
 }
 
-float matrixDotProd(matrix* u, matrix* v) {
+float vectorDotProduct(matrix* u, matrix* v) {
     
     // Laskee vektorien u ja v pistetulon, tarkistaa, että 
-    // molemmat ovat 4x1 -matriiseja eli neliulotteisia vektoreita.
+    // molemmat annetut matriisit ovat vektoreita.
     
-    assert(u->rows == 4 && u->columns == 1);
-    assert(v->rows == 4 && v->columns == 1);
+    assert(u->columns == 1 && v->columns == 1);
     
-    float dotProduct = u->values[0][0]*v->values[0][0]
-        + u->values[1][0]*v->values[1][0]
-        + u->values[2][0]*v->values[2][0]
-        + u->values[3][0]*v->values[3][0];
+    float dotProduct = 0;
+    
+    int i = 0;
+    
+    for(i ; i < u->rows ; i++) {
+        dotProduct += u->values[i][0]*v->values[i][0];
+    }
     
     return dotProduct;
 }

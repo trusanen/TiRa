@@ -21,10 +21,11 @@ mesh* newUnitCube(scene* scene) {
     vertex* SEL = meshNewVertex(unitCube, 1, -1, -1);
     vertex* SWL = meshNewVertex(unitCube, -1, -1, -1);
     
-    // Muodostetaan polygonit
+    // Muodostetaan polygonit, verteksit määritellään myötäpäivään
+    // pinnan normaalin suhteen.
     
-    polygon* front1 = meshNewPolygon(unitCube, SEU, SWU, SWL);
-    polygon* front2 = meshNewPolygon(unitCube, SWL, SEL, SEU);
+    polygon* front1 = meshNewPolygon(unitCube, SWU, SEU, SEL);
+    polygon* front2 = meshNewPolygon(unitCube, SEL, SWL, SWU);
     setPolygonColor(front1, 0xff000000);
     setPolygonColor(front2, 0xff000000);
     
@@ -38,8 +39,8 @@ mesh* newUnitCube(scene* scene) {
     setPolygonColor(right1, 0x0000ff00);
     setPolygonColor(right2, 0x0000ff00);
     
-    polygon* left1 = meshNewPolygon(unitCube, SWU, NWU, NWL);
-    polygon* left2 = meshNewPolygon(unitCube, NWL, SWL, SWU);
+    polygon* left1 = meshNewPolygon(unitCube, NWU, SWU, SWL);
+    polygon* left2 = meshNewPolygon(unitCube, SWL, NWL, NWU);
     setPolygonColor(left1, 0xf0f0f000);
     setPolygonColor(left2, 0xf0f0f000);
     

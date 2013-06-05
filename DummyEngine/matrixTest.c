@@ -81,6 +81,8 @@ void matrixTest() {
     identity->values[2][2] = 1;
     identity->values[3][3] = 1;
     
+    float dotProductResult = 3.21;
+    
     // Aloitetaan testit
     
     // Matriisien summan testaus
@@ -127,6 +129,25 @@ void matrixTest() {
     
     assert(matrixNorm(G, identity) == 0);
     
+    // Sisätulon testaus
+    
+    matrix* H = newMatrix(4, 1);
+    matrix* I = newMatrix(4, 1);
+    
+    H->values[0][0] = 1.1;
+    H->values[1][0] = 1;
+    H->values[2][0] = 0;
+    H->values[3][0] = -65;
+    
+    I->values[0][0] = 1.1;
+    I->values[1][0] = 2;
+    I->values[2][0] = 353;
+    I->values[3][0] = 0;
+    
+    float result = vectorDotProduct(H, I);
+    
+    assert(result == dotProductResult);
+    
     // Poistetaan matriisit
     
     deleteMatrix(A);
@@ -138,6 +159,8 @@ void matrixTest() {
     deleteMatrix(vectorTranspose);
     deleteMatrix(F);
     deleteMatrix(G);
+    deleteMatrix(H);
+    deleteMatrix(I);
     
     deleteMatrix(sumResult);
     deleteMatrix(mulResult);

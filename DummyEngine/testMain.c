@@ -6,4 +6,6 @@ void runTests() {
     sceneTest();
     
     meshTest();
+    
+    backfaceCullingTest();
 }
