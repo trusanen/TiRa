@@ -3,6 +3,8 @@ void runTests() {
     
     normalTest();
     
+    polygonTest();
+    
     sdlTest();
             
     sceneTest();
@@ -10,4 +12,6 @@ void runTests() {
     meshTest();
     
     backfaceCullingTest();
+    
+    solidDrawTest();
 }

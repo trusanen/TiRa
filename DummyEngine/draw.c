@@ -115,10 +115,10 @@ void drawCircle(SDL_Surface* surface, float x, float y, float r, Uint32 color) {
 
 void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
     
-    // Funktio piirtää polygonin ääriviivat, tarkistaa, että-
-    // pinnan osoitin ei ole tyhjä.
+    // Funktio piirtää polygonin ääriviivat, tarkistaa, että
+    // osoittimet eivät ole tyhjiä.
     
-    assert(surface != NULL);
+    assert(surface != NULL && P != NULL);
     
     int screenWidth = surface->w;
     int screenHeight = surface->h;
@@ -148,6 +148,163 @@ void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
     drawCircle(surface, x2, y2, 5, magenta);
     drawCircle(surface, x3, y3, 5, magenta);
     
+}
+
+int isInsidePolygon(int x, int y, polygon* P) {
+    
+    // Testaa, onko piste (x, y) polygonin P (kolmion P)
+    // sisällä. Funktio tarkistaa, että P:n normalisoidut
+    // koordinaatit ovat laskettu ja x ja y ovat suurempia
+    // kuin nolla.
+    
+    // Funktio käyttää ns. Crossing numbers -metodia konvekseille
+    // polygoneille (joita kolmiot ovat). Jos pisteestä (x, y)
+    // lähetetty vaakasuora viiva leikkaa parillisen määrän
+    // kolmion reunoja, sen on oltava kolmion oikealla puolella.
+    // Jos taas leikkauksia on pariton määrä, se on kolmion sisällä.
+    
+    assert(x >= 0 && y >= 0);
+    assert(P != NULL);
+    assert(P->verts[0]->window != NULL);
+    
+    // Tehdään listat x- ja y-koordinaateista
+    
+    float xs[4] = { P->verts[0]->window->values[0][0], 
+        P->verts[1]->window->values[0][0],
+        P->verts[2]->window->values[0][0],
+        P->verts[0]->window->values[0][0]
+        };
+    float ys[4] = { P->verts[0]->window->values[2][0], 
+        P->verts[1]->window->values[2][0],
+        P->verts[2]->window->values[2][0],
+        P->verts[0]->window->values[2][0]
+        };
+    
+    int crossings = 0;
+    
+    int i = 0;
+    
+    for(i ; i < 3 ; i++) {
+        
+        // Tarkistetaan, että pisteen x-koordinaatti löytyy 
+        // viivan vasemmalta puolelta ja että viiva ei ole
+        // vaakasuora.
+        
+        if((x <= xs[i] || x <= xs[i+1]) && ys[i] != ys[i+1]) {
+            
+            // Tarkistetaan, että pisteen y-koordinaatti löytyy
+            // viivan alku- ja loppupisteiden välistä.
+            
+            // Jos viiva on alaspäin suuntautuva (ys[i] > ys[i+1]),
+            // niin hylätään alkupiste. Jos taas viiva on
+            // ylöspäin suuntautuva, hylätään loppupiste.
+            
+            if(y < ys[i] && y > ys[i+1] && x != xs[i]) {
+                crossings++;
+            }
+            if(y > ys[i] && y < ys[i+1] && x != xs[i+1]) {
+                crossings++;
+            }
+        }
+    }
+    
+    return crossings % 2;
+}
+
+void calculateWindowCoordinates(SDL_Surface* surface, polygon* P) {
+    
+    // Laskee polygonin vertekseille niiden ikkunakoordinaatit
+    // eli sijainnin ruudulla. Tarkistaa, että osoittimet eivät
+    // ole tyhjiä.
+    
+    assert(surface != NULL && P != NULL);
+    
+    int screenWidth = surface->w;
+    int screenHeight = surface->h;
+    
+    int i = 0;
+    
+    for(i ; i < 3 ; i++) {
+        if(P->verts[i]->window == NULL) {
+            P->verts[i]->window = newMatrix(4, 1);
+        }
+        
+        P->verts[i]->window->values[0][0] = screenWidth * 0.5
+                + P->verts[i]->NDC->values[0][0]*screenWidth*0.5;
+        P->verts[i]->window->values[1][0] = P->verts[i]->NDC->values[1][0];
+        P->verts[i]->window->values[2][0] = screenHeight * 0.5
+                + P->verts[i]->NDC->values[2][0]*screenHeight*0.5;
+        P->verts[i]->window->values[3][0] = 1;
+    }
+}
+
+boundingBox* calculateBoundingBox(polygon* P) {
+    
+    // Laskee pienimmän neliön, joka sisältää polygonin P
+    // Tarkistaa, että osoitin ei ole tyhjä.
+    
+    assert(P != NULL);
+    
+    boundingBox* bb = malloc(sizeof(boundingBox));
+    
+    bb->xmin = P->verts[0]->window->values[0][0];
+    bb->xmax = P->verts[0]->window->values[0][0];
+    bb->ymin = P->verts[0]->window->values[2][0];
+    bb->ymax = P->verts[0]->window->values[2][0];
+    
+    int i = 0;
+    
+    for(i ; i < 3 ; i++) {
+        
+        if(bb->xmax < P->verts[i]->window->values[0][0]) {
+            bb->xmax = P->verts[i]->window->values[0][0];
+        }
+        if(bb->xmin > P->verts[i]->window->values[0][0]) {
+            bb->xmin = P->verts[i]->window->values[0][0];
+        }
+        if(bb->ymax < P->verts[i]->window->values[2][0]) {
+            bb->ymax = P->verts[i]->window->values[2][0];
+        }
+        if(bb->ymin > P->verts[i]->window->values[2][0]) {
+            bb->ymin = P->verts[i]->window->values[2][0];
+        }
+        
+    }
+    
+    return bb;
+}
+
+void drawPolygonSolid(SDL_Surface* surface, polygon* P) {
+    
+    // Piirtää polygonin umpinaisena, tarkistaa, että annetut
+    // osoittimet eivät ole tyhjiä.
+    
+    // Tämä funktio on huono approksimaatio, eikä käsittele
+    // polygoneja hyvin, tulee parantumaan.
+    
+    assert(surface != NULL && P != NULL);
+    
+    calculateWindowCoordinates(surface, P);
+    
+    // Lasketaan pienin neliö, joka sisältää polygonin.
+    
+    boundingBox* bb = calculateBoundingBox(P);
+    
+    // Väritetään jokainen pikseli, joka sisältyy polygoniin.
+    
+    int i = bb->xmin;
+    int j = bb->ymin;
+    
+    for(i ; i <= bb->xmax ; i++) {
+        for(j ; j <= bb->ymax ; j++) {
+            if(isInsidePolygon(i, j, P)) {
+                putPixel(surface, i, j, P->color);
+            }
+        }
+        j = bb->ymin;
+    }
+    
+    free(bb);
 }
 
 int doBackfaceCulling(camera* cam, polygon* P) {
@@ -287,6 +444,68 @@ void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
                     // Piirretään polygoni
 
                     drawPolygonWireframe(surface, P);
+                }
+                
+                P = P->next;
+            }
+            
+            deleteMatrix(world);
+            deleteMatrix(fullTransform);
+        }
+        obj = obj->next;
+    }
+    
+    deleteMatrix(camMatrix);
+}
+
+void drawSceneSolid(SDL_Surface* surface, scene* scene) {
+    
+    // Piirtää tilan solid-muodossa, poistaa kaikki pinnat, jotka
+    // eivät osoita kameraan päin. Tarkistaa, että argumentit
+    // eivät ole tyhjiä osoittimia.
+    
+    assert(surface != NULL && scene != NULL);
+    
+    if(scene->camera == NULL) {
+        printf("No camera assigned! Stopping render.");
+        return;
+    }
+    
+    // Lasketaan kameramatriisi
+    
+    matrix* camMatrix;
+    
+    matrix* viewMatrix = getViewMatrix(scene->camera);
+    matrix* projMatrix = scene->camera->perspectiveMatrix;
+    
+    camMatrix = matrixMultiply(projMatrix, viewMatrix);
+    
+    matrix* world;
+    matrix* fullTransform;
+    
+    object* obj = scene->objects;
+    
+    while(obj != NULL) {
+        if(obj->mesh != NULL) {
+            
+            // Lasketaan objektikohtainen muunnosmatriisi
+            
+            world = matrixMultiply(camMatrix, obj->worldTransform);
+            fullTransform = matrixMultiply(world, obj->scaleTransform);
+            
+            polygon* P = obj->mesh->polygons;
+            
+            while(P != NULL) {
+                
+                if(doBackfaceCulling(scene->camera, P)) {
+                    
+                    // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
+
+                    transformPolygon(P, fullTransform);
+
+                    // Piirretään polygoni
+
+                    drawPolygonSolid(surface, P);
                 }
                 
                 P = P->next;

@@ -22,6 +22,7 @@ vertex* meshNewVertex(mesh* M, float x, float y, float z) {
     V->coords->values[3][0] = 1;
     
     V->NDC = NULL;
+    V->window = NULL;
     
     V->next = NULL;
     V->prev = NULL;
@@ -51,6 +52,10 @@ void deleteVertex(vertex* V) {
     
     if(V->NDC != NULL) {
         deleteMatrix(V->NDC);
+    }
+    
+    if(V->window != NULL) {
+        deleteMatrix(V->window);
     }
     
     free(V);

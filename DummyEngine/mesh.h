@@ -16,6 +16,7 @@ struct scene;
 typedef struct vertex_t {
     matrix* coords;
     matrix* NDC; // Normalized Device Coordinates
+    matrix* window; // Window coordinates
     struct vertex_t* next;
     struct vertex_t* prev;
 } vertex;

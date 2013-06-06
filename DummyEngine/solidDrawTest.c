@@ -4,19 +4,20 @@
 #include <math.h>
 #include "primitives.h"
 
-void backfaceCullingTest() {
+void solidDrawTest() {
     
-    // Tällä testataan niiden polygonien leikkaamista pois kuvasta,
-    // jotka eivät osoita kameraan päin. Kuvan pitäisi olla sama,
-    // kuin edellisessä testissä, mutta kaikki polygonit kuutiosta
-    // ja kartiosta, jotka jäävät muiden polygonien peittoon,
-    // tulisi olla poistettu.
+    // Tällä testataan polygonien täydellistä piirtämistä niiden omalla
+    // värillään. Tämä vaatii toimiakseen ainoastaan kamerasta poispäin
+    // osoittavien polygonien poistamisen (backface culling), sillä
+    // tilassa määritellyt objektit ovat kaikki konvekseja. Jotta pystytään
+    // piirtämään kaikkia mahdollisia tiloja, joudutaan jollakin tavalla
+    // määrittelemään näkyvät pinnat. Tähän tarvitsemme esim. BSP-puuta.
     
     SDL_Surface* screen = NULL;
     
     SDL_Init( SDL_INIT_EVERYTHING);
     
-    SDL_WM_SetCaption("Backface culling test", "Backface culling test");
+    SDL_WM_SetCaption("Solid drawing test", "Solid drawing test");
     
     screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
     
@@ -45,13 +46,13 @@ void backfaceCullingTest() {
     
     objectTranslate(cone, 7, -7, 0);
     
-    drawSceneWireframeBackfaceCulling(screen, scn);
+    drawSceneSolid(screen, scn);
     
     SDL_Flip(screen);
     
-    SDL_Delay(2000);
+    SDL_Delay(5000);
     
-    SDL_SaveBMP(screen, "cullingTest.bmp");
+    SDL_SaveBMP(screen, "solidDrawTest.bmp");
     
     SDL_Quit();
     
