@@ -7,6 +7,9 @@ void polygonTest() {
     
     // Tällä testataan polygoneihin liittyviä funktioita.
     
+    assert(1.9 < 2);
+    assert(1.9999 < 2);
+    
     scene* scn = newScene();
     
     object* obj= scn->objects->next;
@@ -37,8 +40,6 @@ void polygonTest() {
     SDL_Surface* screen = NULL;
     
     SDL_Init( SDL_INIT_EVERYTHING);
-    
-    SDL_WM_SetCaption("Solid drawing test", "Solid drawing test");
     
     screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
     

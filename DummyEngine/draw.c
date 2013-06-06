@@ -157,12 +157,6 @@ int isInsidePolygon(int x, int y, polygon* P) {
     // koordinaatit ovat laskettu ja x ja y ovat suurempia
     // kuin nolla.
     
-    // Funktio käyttää ns. Crossing numbers -metodia konvekseille
-    // polygoneille (joita kolmiot ovat). Jos pisteestä (x, y)
-    // lähetetty vaakasuora viiva leikkaa parillisen määrän
-    // kolmion reunoja, sen on oltava kolmion oikealla puolella.
-    // Jos taas leikkauksia on pariton määrä, se on kolmion sisällä.
-    
     assert(x >= 0 && y >= 0);
     assert(P != NULL);
     assert(P->verts[0]->window != NULL);
@@ -181,29 +175,66 @@ int isInsidePolygon(int x, int y, polygon* P) {
         };
     
     int crossings = 0;
+    float angle;
+    float isect;
     
     int i = 0;
     
     for(i ; i < 3 ; i++) {
         
-        // Tarkistetaan, että pisteen x-koordinaatti löytyy 
-        // viivan vasemmalta puolelta ja että viiva ei ole
-        // vaakasuora.
+        // Tarkistetaan, että piste löytyy viivan päätepisteiden
+        // x-koordinaattien vasemmalta puolelta ja että viiva
+        // ei ole vaakasuora.
         
-        if((x <= xs[i] || x <= xs[i+1]) && ys[i] != ys[i+1]) {
+        if((x <= xs[i] || x <= xs[i+1]) &&
+                ys[i] != ys[i+1]) {
             
-            // Tarkistetaan, että pisteen y-koordinaatti löytyy
-            // viivan alku- ja loppupisteiden välistä.
-            
-            // Jos viiva on alaspäin suuntautuva (ys[i] > ys[i+1]),
-            // niin hylätään alkupiste. Jos taas viiva on
-            // ylöspäin suuntautuva, hylätään loppupiste.
-            
-            if(y < ys[i] && y > ys[i+1] && x != xs[i]) {
-                crossings++;
+            if(xs[i+1] > xs[i]) {
+                
+                angle = (ys[i+1]-ys[i]) / (xs[i+1]-xs[i]);
+                isect = angle*x - angle*xs[i] + ys[i];
+                
+                if(ys[i+1] > ys[i]) {
+                    // Viiva ylöspäinsuuntautuva
+
+                    if(y > isect && y < ys[i+1]) {
+                        crossings++;
+                    }
+                }
+                else {
+                    // Viiva alaspäinsuuntautuva
+
+                    if(y < isect && y > ys[i+1]) {
+                        crossings++;
+                    }
+                }
             }
-            if(y > ys[i] && y < ys[i+1] && x != xs[i+1]) {
-                crossings++;
+            else if(xs[i+1] < xs[i]) {
+                angle = (ys[i]-ys[i+1]) / (xs[i]-xs[i+1]);
+                isect = angle*x - angle*xs[i] + ys[i];
+                
+                if(ys[i] > ys[i+1]) {
+                    // Viiva ylöspäinsuuntautuva
+
+                    if(y > isect && y < ys[i]) {
+                        crossings++;
+                    }
+                }
+                else {
+                    // Viiva alaspäinsuuntautuva
+
+                    if(y < isect && y > ys[i]) {
+                        crossings++;
+                    }
+                }
+            }
+            else {
+                if(x < xs[i] 
+                        || (y < ys[i] && y > ys[i+1])
+                        || (y < ys[i+1] && y > ys[i])
+                        ) {
+                    crossings++;
+                }
             }
         }
     }
@@ -292,8 +323,8 @@ void drawPolygonSolid(SDL_Surface* surface, polygon* P) {
     
     // Väritetään jokainen pikseli, joka sisältyy polygoniin.
     
-    int i = bb->xmin;
-    int j = bb->ymin;
+    int i = ceil(bb->xmin);
+    int j = ceil(bb->ymin);
     
     for(i ; i <= bb->xmax ; i++) {
         for(j ; j <= bb->ymax ; j++) {

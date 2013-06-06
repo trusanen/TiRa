@@ -26,33 +26,33 @@ mesh* newUnitCube(scene* scene) {
     
     polygon* front1 = meshNewPolygon(unitCube, SWU, SEU, SEL);
     polygon* front2 = meshNewPolygon(unitCube, SEL, SWL, SWU);
-    setPolygonColor(front1, 0xff000000);
-    setPolygonColor(front2, 0xff000000);
+    setPolygonColor(front1, 0x00ff0000);
+    setPolygonColor(front2, 0x00ff0000);
     
     polygon* back1 = meshNewPolygon(unitCube, NEU, NWU, NWL);
     polygon* back2 = meshNewPolygon(unitCube, NWL, NEL, NEU);
-    setPolygonColor(back1, 0x00ff0000);
-    setPolygonColor(back2, 0x00ff0000);
+    setPolygonColor(back1, 0x000f0f0f);
+    setPolygonColor(back2, 0x000f0f0f);
     
     polygon* right1 = meshNewPolygon(unitCube, SEU, NEU, NEL);
     polygon* right2 = meshNewPolygon(unitCube, NEL, SEL, SEU);
-    setPolygonColor(right1, 0x0000ff00);
-    setPolygonColor(right2, 0x0000ff00);
+    setPolygonColor(right1, 0x000000ff);
+    setPolygonColor(right2, 0x000000ff);
     
     polygon* left1 = meshNewPolygon(unitCube, NWU, SWU, SWL);
     polygon* left2 = meshNewPolygon(unitCube, SWL, NWL, NWU);
-    setPolygonColor(left1, 0xf0f0f000);
-    setPolygonColor(left2, 0xf0f0f000);
+    setPolygonColor(left1, 0x00f0f0f0);
+    setPolygonColor(left2, 0x00f0f0f0);
     
     polygon* top1 = meshNewPolygon(unitCube, NEU, SEU, SWU);
     polygon* top2 = meshNewPolygon(unitCube, SWU, NWU, NEU);
-    setPolygonColor(top1, 0x0f0f0f00);
-    setPolygonColor(top2, 0x0f0f0f00);
+    setPolygonColor(top1, 0x0000ff00);
+    setPolygonColor(top2, 0x0000ff00);
     
     polygon* bottom1 = meshNewPolygon(unitCube, SWL, SEL, NEL);
     polygon* bottom2 = meshNewPolygon(unitCube, NEL, NWL, SWL);
-    setPolygonColor(bottom1, 0xffffff00);
-    setPolygonColor(bottom2, 0xffffff00);
+    setPolygonColor(bottom1, 0x00ffffff);
+    setPolygonColor(bottom2, 0x00ffffff);
     
     return unitCube;
 }
@@ -80,6 +80,9 @@ mesh* newGrid(scene* scene, int x, int y) {
     vertex* SE;
     vertex* SW;
     
+    polygon* p1;
+    polygon* p2;
+    
     i = 0;
     j = 0;
     
@@ -89,8 +92,10 @@ mesh* newGrid(scene* scene, int x, int y) {
             NW = meshGetVertex(grid, (x+1)*j+i+1);
             SE = meshGetVertex(grid, (x+1)*(j+1)+i);
             SW = meshGetVertex(grid, (x+1)*(j+1)+i+1);
-            meshNewPolygon(grid, NW, NE, SE);
-            meshNewPolygon(grid, SE, SW, NW);
+            p1 = meshNewPolygon(grid, NW, NE, SE);
+            p2 = meshNewPolygon(grid, SE, SW, NW);
+            setPolygonColor(p1, 0x00ff0000);
+            setPolygonColor(p2, 0x000000ff);
         }
         i = 0;
     }
