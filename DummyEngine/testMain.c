@@ -14,4 +14,6 @@ void runTests() {
     backfaceCullingTest();
     
     solidDrawTest();
+    
+    md2ImportTest();
 }
