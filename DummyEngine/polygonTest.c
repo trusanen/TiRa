@@ -7,8 +7,6 @@ void polygonTest() {
     
     // Tällä testataan polygoneihin liittyviä funktioita.
     
-    printf("ceil(x): %f", ceil(2.00000001));
-    
     scene* scn = newScene();
     
     object* obj= scn->objects->next;
