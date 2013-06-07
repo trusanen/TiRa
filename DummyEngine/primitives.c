@@ -83,6 +83,9 @@ mesh* newGrid(scene* scene, int x, int y) {
     polygon* p1;
     polygon* p2;
     
+    int white = 0x00ffffff;
+    int gray = 0x00666666;
+    
     i = 0;
     j = 0;
     
@@ -94,8 +97,14 @@ mesh* newGrid(scene* scene, int x, int y) {
             SW = meshGetVertex(grid, (x+1)*(j+1)+i+1);
             p1 = meshNewPolygon(grid, NW, NE, SE);
             p2 = meshNewPolygon(grid, SE, SW, NW);
-            setPolygonColor(p1, 0x00ff0000);
-            setPolygonColor(p2, 0x000000ff);
+            if((i+j) % 2 == 0) {
+                setPolygonColor(p1, white);
+                setPolygonColor(p2, white);
+            }
+            else {
+                setPolygonColor(p1, gray);
+                setPolygonColor(p2, gray);
+            }
         }
         i = 0;
     }
@@ -120,14 +129,28 @@ mesh* newCone(scene* scene, int vertices, float height) {
     vertex* first = start;
     vertex* new;
     
+    int white = 0x00ffffff;
+    int red = 0x00ff0000;
+    
+    polygon* pTop;
+    polygon* pBottom;
+    
     float angle = 2*M_PI/vertices;
     
     int i = 1;
     
     for(i ; i < vertices ; i++) {
         new = meshNewVertex(cone, cos(i*angle), sin(i*angle), 0);
-        meshNewPolygon(cone, new, first, top);
-        meshNewPolygon(cone, first, new, bottom);
+        pTop = meshNewPolygon(cone, new, first, top);
+        pBottom = meshNewPolygon(cone, first, new, bottom);
+        if(i % 2 == 0) {
+            setPolygonColor(pTop, white);
+            setPolygonColor(pBottom, red);
+        }
+        else {
+            setPolygonColor(pTop, red);
+            setPolygonColor(pBottom, white);
+        }
         first = new;
     }
     

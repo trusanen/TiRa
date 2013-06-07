@@ -332,13 +332,13 @@ void drawPolygonSolid(SDL_Surface* surface, polygon* P) {
     int i = ceil(bb->xmin);
     int j = ceil(bb->ymin);
     
-    for(i ; i <= bb->xmax ; i++) {
-        for(j ; j <= bb->ymax ; j++) {
+    for(i ; i <= floor(bb->xmax) ; i++) {
+        for(j ; j <= floor(bb->ymax) ; j++) {
             if(isInsidePolygon(i, j, P)) {
                 putPixel(surface, i, j, P->color);
             }
         }
-        j = bb->ymin;
+        j = ceil(bb->ymin);
     }
     
     free(bb);

@@ -33,6 +33,8 @@ void solidDrawTest() {
     
     polygon* P = meshNewPolygon(M1, V1, V2, V3);
     
+    setPolygonColor(P, 0x00ff00ff);
+    
     object* grid = sceneNewObject(scn);
     mesh* M2 = newGrid(scn, 4, 4);
     grid->mesh = M2;
