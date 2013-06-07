@@ -7,9 +7,6 @@ void polygonTest() {
     
     // Tällä testataan polygoneihin liittyviä funktioita.
     
-    assert(1.9 < 2);
-    assert(1.9999 < 2);
-    
     scene* scn = newScene();
     
     object* obj= scn->objects->next;

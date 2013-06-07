@@ -157,6 +157,9 @@ int isInsidePolygon(int x, int y, polygon* P) {
     // koordinaatit ovat laskettu ja x ja y ovat suurempia
     // kuin nolla.
     
+    // Funktio käyttää kolmioille räätälöityä "Crossing numbers"
+    // -algoritmia.
+    
     assert(x >= 0 && y >= 0);
     assert(P != NULL);
     assert(P->verts[0]->window != NULL);
@@ -179,6 +182,9 @@ int isInsidePolygon(int x, int y, polygon* P) {
     float isect;
     
     int i = 0;
+    
+    // Käydään läpi kaikki verteksien väliset viivat 
+    // (xs[i], ys[i]) -> (xs[i+1], ys[i+1])
     
     for(i ; i < 3 ; i++) {
         
@@ -230,8 +236,8 @@ int isInsidePolygon(int x, int y, polygon* P) {
             }
             else {
                 if(x < xs[i] 
-                        || (y < ys[i] && y > ys[i+1])
-                        || (y < ys[i+1] && y > ys[i])
+                        && ((y < ys[i] && y > ys[i+1])
+                        || (y < ys[i+1] && y > ys[i]))
                         ) {
                     crossings++;
                 }
