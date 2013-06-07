@@ -3,7 +3,7 @@ void runTests() {
     
     normalTest();
     
-    polygonTest();
+    //polygonTest();
     
     sdlTest();
             
