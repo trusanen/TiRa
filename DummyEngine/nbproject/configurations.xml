@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/codeSnippets.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/draw.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mathematics.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/md2Loader.h</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.h</itemPath>
@@ -21,6 +22,7 @@
                    projectFiles="true">
       <logicalFolder name="f1" displayName="Test Files" projectFiles="true">
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/backfaceCullingTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mathematicsTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrixTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/md2ImportTest.c</itemPath>
         <itemPath>/home/topias/TiRa/TiRa/DummyEngine/meshTest.c</itemPath>
@@ -33,6 +35,7 @@
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/codeSnippets.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/draw.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/main.c</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mathematics.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/md2Loader.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.c</itemPath>

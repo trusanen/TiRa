@@ -153,7 +153,7 @@ void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
 int isInsidePolygon(int x, int y, polygon* P) {
     
     // Testaa, onko piste (x, y) polygonin P (kolmion P)
-    // sisällä. Funktio tarkistaa, että P:n normalisoidut
+    // sisällä. Funktio tarkistaa, että P:n ikkuna-
     // koordinaatit ovat laskettu ja x ja y ovat suurempia
     // kuin nolla.
     
@@ -195,7 +195,12 @@ int isInsidePolygon(int x, int y, polygon* P) {
         if((x <= xs[i] || x <= xs[i+1]) &&
                 ys[i] != ys[i+1]) {
             
+            // Tarkistetaan, että x-koordinaatit ovat oikeinpäin
+            
             if(xs[i+1] > xs[i]) {
+                
+                // Lasketaan kulmakerroin ja sitä kautta leikkauspiste
+                // suoran yhtälön avulla.
                 
                 angle = (ys[i+1]-ys[i]) / (xs[i+1]-xs[i]);
                 isect = angle*x - angle*xs[i] + ys[i];
@@ -216,6 +221,10 @@ int isInsidePolygon(int x, int y, polygon* P) {
                 }
             }
             else if(xs[i+1] < xs[i]) {
+                
+                // Lasketaan kulmakerroin ja sitä kautta leikkauspiste
+                // suoran yhtälön avulla.
+                
                 angle = (ys[i]-ys[i+1]) / (xs[i]-xs[i+1]);
                 isect = angle*x - angle*xs[i] + ys[i];
                 
@@ -234,6 +243,11 @@ int isInsidePolygon(int x, int y, polygon* P) {
                     }
                 }
             }
+            
+            // Jos x-koordinaatit ovat samat, tarkistetaan
+            // vain, että piste on niiden vasemmalla puolella
+            // ja päätepisteiden välissä.
+            
             else {
                 if(x < xs[i] 
                         && ((y < ys[i] && y > ys[i+1])
@@ -244,6 +258,10 @@ int isInsidePolygon(int x, int y, polygon* P) {
             }
         }
     }
+    
+    // Palautetaan parillisuus, jos leikkauksia on parillinen määrä,
+    // on piste kolmion ulkopuolella, jos taas pariton, on piste
+    // kolmion sisällä.
     
     return crossings % 2;
 }
@@ -316,9 +334,6 @@ void drawPolygonSolid(SDL_Surface* surface, polygon* P) {
     // Piirtää polygonin umpinaisena, tarkistaa, että annetut
     // osoittimet eivät ole tyhjiä.
     
-    // Tämä funktio on huono approksimaatio, eikä käsittele
-    // polygoneja hyvin, tulee parantumaan.
-    
     assert(surface != NULL && P != NULL);
     
     calculateWindowCoordinates(surface, P);
@@ -368,7 +383,7 @@ int doBackfaceCulling(camera* cam, polygon* P) {
     
     float dotProduct = vectorDotProduct(camToPolygon, P->normal);
     
-    if(dotProduct >= 0) {
+    if(dotProduct < 0) {
         return 1;
     }
     return 0;

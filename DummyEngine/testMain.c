@@ -1,6 +1,8 @@
 void runTests() {
     matrixTest();
     
+    mathematicsTest();
+    
     normalTest();
     
     //polygonTest();

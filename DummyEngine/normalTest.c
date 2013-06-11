@@ -10,7 +10,7 @@ void normalTest() {
     
     //     [ 0 ]
     // n = [ 0 ]
-    //     [ 4 ]
+    //     [ -4 ]
     //     [ 1 ]
     
     scene* scn = newScene();
@@ -23,7 +23,7 @@ void normalTest() {
     
     assert(normal->values[0][0] == 0);
     assert(normal->values[1][0] == 0);
-    assert(normal->values[2][0] == 4);
+    assert(normal->values[2][0] == -4);
     assert(normal->values[3][0] == 1);
     
     deleteMatrix(normal);

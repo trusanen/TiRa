@@ -47,7 +47,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/73483906/scene.o \
 	${OBJECTDIR}/_ext/73483906/normalTest.o \
 	${OBJECTDIR}/_ext/73483906/codeSnippets.o \
+	${OBJECTDIR}/_ext/73483906/mathematicsTest.o \
 	${OBJECTDIR}/_ext/73483906/mesh.o \
+	${OBJECTDIR}/_ext/73483906/mathematics.o \
 	${OBJECTDIR}/_ext/73483906/draw.o \
 	${OBJECTDIR}/_ext/73483906/polygonTest.o \
 	${OBJECTDIR}/_ext/73483906/md2ImportTest.o \
@@ -143,10 +145,20 @@ ${OBJECTDIR}/_ext/73483906/codeSnippets.o: /home/topias/TiRa/TiRa/DummyEngine/co
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/codeSnippets.o /home/topias/TiRa/TiRa/DummyEngine/codeSnippets.c
 
+${OBJECTDIR}/_ext/73483906/mathematicsTest.o: /home/topias/TiRa/TiRa/DummyEngine/mathematicsTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/mathematicsTest.o /home/topias/TiRa/TiRa/DummyEngine/mathematicsTest.c
+
 ${OBJECTDIR}/_ext/73483906/mesh.o: /home/topias/TiRa/TiRa/DummyEngine/mesh.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/mesh.o /home/topias/TiRa/TiRa/DummyEngine/mesh.c
+
+${OBJECTDIR}/_ext/73483906/mathematics.o: /home/topias/TiRa/TiRa/DummyEngine/mathematics.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/mathematics.o /home/topias/TiRa/TiRa/DummyEngine/mathematics.c
 
 ${OBJECTDIR}/_ext/73483906/draw.o: /home/topias/TiRa/TiRa/DummyEngine/draw.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906

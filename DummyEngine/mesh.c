@@ -152,12 +152,12 @@ matrix* calculatePolygonNormal(polygon* P) {
     
     matrix* normal = newMatrix(4, 1);
     
-    normal->values[0][0] = u->values[1][0]*v->values[2][0] 
-            - u->values[2][0]*v->values[1][0];
-    normal->values[1][0] = u->values[2][0]*v->values[0][0] 
-            - u->values[0][0]*v->values[2][0];
-    normal->values[2][0] = u->values[0][0]*v->values[1][0] 
-            - u->values[1][0]*v->values[0][0];
+    normal->values[0][0] = -u->values[1][0]*v->values[2][0] 
+            + u->values[2][0]*v->values[1][0];
+    normal->values[1][0] = -u->values[2][0]*v->values[0][0] 
+            + u->values[0][0]*v->values[2][0];
+    normal->values[2][0] = -u->values[0][0]*v->values[1][0] 
+            + u->values[1][0]*v->values[0][0];
     normal->values[3][0] = 1;
     
     deleteMatrix(u);
