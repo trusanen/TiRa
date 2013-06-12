@@ -30,7 +30,7 @@ void polygonTest() {
     world = matrixMultiply(camMatrix, obj->worldTransform);
     fullTransform = matrixMultiply(world, obj->scaleTransform);
     
-    transformPolygon(top2, fullTransform);
+    calculateNormalizedDeviceCoordinates(top2, fullTransform);
     
     // Lasketaan ikkunakoordinaatit
     

@@ -380,9 +380,12 @@ int doBackfaceCulling(camera* cam, polygon* P) {
             cam->cameraObj->worldTransform->values[2][3];
     camToPolygon->values[3][0] = 1;
     
-    // Lasketaan tämän vektorin ja normaalin sisätulo
+    // Lasketaan kamerasta polygonin ensimmäiseen verteksiin osoittavan
+    // vektorin ja muunnetun normaalivektorin sisätulo.
     
     float dotProduct = vectorDotProduct(camToPolygon, P->normal);
+    
+    deleteMatrix(camToPolygon);
     
     if(dotProduct < 0) {
         return 1;
@@ -430,7 +433,7 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
                 
                 // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
                 
-                transformPolygon(P, fullTransform);
+                calculateNormalizedDeviceCoordinates(P, fullTransform);
                 
                 // Piirretään polygoni
                 
@@ -488,11 +491,11 @@ void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
             
             while(P != NULL) {
                 
-                if(doBackfaceCulling(scene->camera, P)) {
+                if(doBackfaceCulling(scene->camera, P, world)) {
                     
                     // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
 
-                    transformPolygon(P, fullTransform);
+                    calculateNormalizedDeviceCoordinates(P, fullTransform);
 
                     // Piirretään polygoni
 
@@ -550,11 +553,11 @@ void drawSceneSolid(SDL_Surface* surface, scene* scene) {
             
             while(P != NULL) {
                 
-                if(doBackfaceCulling(scene->camera, P)) {
+                if(doBackfaceCulling(scene->camera, P, world)) {
                     
                     // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
 
-                    transformPolygon(P, fullTransform);
+                    calculateNormalizedDeviceCoordinates(P, fullTransform);
 
                     // Piirretään polygoni
 
@@ -588,4 +591,5 @@ void drawBSPTree(SDL_Surface* surface, scene* scene) {
     
     travelBSPTree(root, surface);
 
+    deleteBSPTree(root);
 }

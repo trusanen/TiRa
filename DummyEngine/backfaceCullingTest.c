@@ -22,6 +22,10 @@ void backfaceCullingTest() {
     
     scene* scn = newScene();
     
+    mesh* unitCubeMesh = scn->objects->next->mesh;
+    
+    // Luodaan yksi pinkki polygoni
+    
     object* triangle = sceneNewObject(scn);
     mesh* M1 = sceneNewMesh(scn);
     triangle->mesh = M1;
@@ -32,6 +36,10 @@ void backfaceCullingTest() {
     
     polygon* P = meshNewPolygon(M1, V1, V2, V3);
     
+    setPolygonColor(P, 0x00ff00ff);
+    
+    // Luodaan ruudukko
+    
     object* grid = sceneNewObject(scn);
     mesh* M2 = newGrid(scn, 4, 4);
     grid->mesh = M2;
@@ -39,11 +47,22 @@ void backfaceCullingTest() {
     objectTranslate(grid, 7, 7, 0);
     objectRotate(grid, 0, M_PI/4, -M_PI/2);
     
+    // Luodaan kartio
+    
     object* cone = sceneNewObject(scn);
     mesh* M3 = newCone(scn, 16, 4.0);
     cone->mesh = M3;
     
     objectTranslate(cone, 7, -7, 0);
+    
+    // Luodaan toinen kuutio
+    
+    object* cube = sceneNewObject(scn);
+    cube->mesh = newUnitCube(scn);
+    //cube->mesh = unitCubeMesh;
+    
+    objectRotate(cube, 0, 0, M_PI/2);
+    objectTranslate(cube, 0, -5, 0);
     
     drawSceneWireframeBackfaceCulling(screen, scn);
     

@@ -20,7 +20,7 @@ void runTests() {
     
     solidDrawTest();
     
-    bspTest();
+    //bspTest();
     
     //md2ImportTest();
 }

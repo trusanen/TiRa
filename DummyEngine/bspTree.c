@@ -44,7 +44,7 @@ bspNode* createBSPTree(scene* scene) {
     matrix* world;
     matrix* fullTransform;
     
-    // Käydään läpi tilan kaikki mallit ja laitetaan kaikki polygonit
+    // Käydään läpi tilan kaikki objektit ja laitetaan kaikki polygonit
     // aluksi yhteen listaan.
     
     object* obj = scene->objects;
@@ -116,11 +116,43 @@ void resolveBSPTree(bspNode* root) {
         return;
     }
     
+/*
+    printf("root:\n");
+    printf("V1 coords: x=%f, y=%f, z=%f\n", 
+            root->polygon->verts[0]->coords->values[0][0],
+            root->polygon->verts[0]->coords->values[1][0],
+            root->polygon->verts[0]->coords->values[2][0]);
+    printf("V2 coords: x=%f, y=%f, z=%f\n", 
+            root->polygon->verts[1]->coords->values[0][0],
+            root->polygon->verts[1]->coords->values[1][0],
+            root->polygon->verts[1]->coords->values[2][0]);
+    printf("V3 coords: x=%f, y=%f, z=%f\n", 
+            root->polygon->verts[2]->coords->values[0][0],
+            root->polygon->verts[2]->coords->values[1][0],
+            root->polygon->verts[2]->coords->values[2][0]);
+*/
+    
     bspNode* prev = root;
     bspNode* next = root->front;
     
     while(next != NULL) {
         if(!isInFrontOfPolygon(root->polygon, next->polygon)) {
+            
+/*
+            printf("polygon moved behind root:\n");
+            printf("V1 coords: x=%f, y=%f, z=%f\n", 
+                    next->polygon->verts[0]->coords->values[0][0],
+                    next->polygon->verts[0]->coords->values[1][0],
+                    next->polygon->verts[0]->coords->values[2][0]);
+            printf("V2 coords: x=%f, y=%f, z=%f\n", 
+                    next->polygon->verts[1]->coords->values[0][0],
+                    next->polygon->verts[1]->coords->values[1][0],
+                    next->polygon->verts[1]->coords->values[2][0]);
+            printf("V3 coords: x=%f, y=%f, z=%f\n", 
+                    next->polygon->verts[2]->coords->values[0][0],
+                    next->polygon->verts[2]->coords->values[1][0],
+                    next->polygon->verts[2]->coords->values[2][0]);
+*/
             
             prev->front = next->front;
             
@@ -168,7 +200,7 @@ void travelBSPTree(bspNode* root, SDL_Surface* surface) {
     
     // Piirretään polygoni
     
-    transformPolygon(root->polygon, root->fullTransform);
+    calculateNormalizedDeviceCoordinates(root->polygon, root->fullTransform);
         
     drawPolygonSolid(surface, root->polygon);
     

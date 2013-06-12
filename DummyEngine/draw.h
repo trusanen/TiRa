@@ -31,6 +31,7 @@ int isInsidePolygon(int x, int y, polygon* P);
 void calculateWindowCoordinates(SDL_Surface* surface, polygon* P);
 boundingBox* calculateBoundingBox(polygon* P);
 void drawPolygonSolid(SDL_Surface* surface, polygon* P);
+int doBackfaceCulling(camera* cam, polygon* P);
 void drawMeshWireframe(SDL_Surface* surface, mesh* M);
 
 void drawSceneWireframe(SDL_Surface* surface, scene* scene);

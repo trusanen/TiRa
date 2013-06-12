@@ -21,6 +21,7 @@ vertex* meshNewVertex(mesh* M, float x, float y, float z) {
     V->coords->values[2][0] = z;
     V->coords->values[3][0] = 1;
     
+    V->world = NULL;
     V->NDC = NULL;
     V->window = NULL;
     
@@ -49,6 +50,10 @@ void deleteVertex(vertex* V) {
     }
     
     deleteMatrix(V->coords);
+    
+    if(V->world != NULL) {
+        deleteMatrix(V->world);
+    }
     
     if(V->NDC != NULL) {
         deleteMatrix(V->NDC);
@@ -166,7 +171,32 @@ matrix* calculatePolygonNormal(polygon* P) {
     return normal;
 }
 
-void transformPolygon(polygon* P, matrix* fullTransform) {
+void calculateWorldCoordinates(polygon* P, matrix* worldTransform) {
+    
+    // Laskee polygonin verteksien oikeat koordinaatit globaalissa
+    // avaruudessa. Tarkistaa, että annetut osoittimet eivät ole
+    // tyhjiä.
+    
+    assert(P != NULL && worldTransform != NULL);
+    
+    int i = 0;
+    
+    for(i ; i < 3 ; i++) {
+        
+        // Poistetaan edellinen world-koordinaattivektori
+        
+        if(P->verts[i]->world != NULL) {
+            deleteMatrix(P->verts[i]->world);
+            P->verts[i]->world = NULL;
+        }
+        
+        // Muunnetaan koordinaatit tila-avaruuteen (world space)
+        
+        P->verts[i]->world = matrixMultiply(worldTransform, P->verts[i]->coords); 
+    }
+}
+
+void calculateNormalizedDeviceCoordinates(polygon* P, matrix* fullTransform) {
     
     // Laskee polygonin verteksien koordinaatit näytöllä 
     // (NDC = Normalized Device Coordinates). Tarkistaa,

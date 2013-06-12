@@ -55,24 +55,43 @@ int isInFrontOfPolygon(polygon* target, polygon* origin) {
     
     matrixMultiplyScalar(basisInv, 1/det);
     
+    // Siirretään tutkittavaa polygonia siten, että origoksi tulee
+    // polygonin ensimmäinen verteksi.
+    
+    matrixMultiplyScalar(origin->verts[0]->coords, -1);
+    
+    matrix* translatedV0 = matrixSum(target->verts[0]->coords, origin->verts[0]->coords);
+    matrix* translatedV1 = matrixSum(target->verts[1]->coords, origin->verts[0]->coords);
+    matrix* translatedV2 = matrixSum(target->verts[2]->coords, origin->verts[0]->coords);
+    
+    // Palautetaan alkuperäisen verteksin koordinaatit
+    
+    matrixMultiplyScalar(origin->verts[0]->coords, -1);
+    
     // Kerrotaan kannanvaihtomatriisilla koordinaattivektoria.
     
-    matrix* newV0 = matrixMultiply(basisInv, target->verts[0]->coords);
-    matrix* newV1 = matrixMultiply(basisInv, target->verts[1]->coords);
-    matrix* newV2 = matrixMultiply(basisInv, target->verts[2]->coords);
+    matrix* newV0 = matrixMultiply(basisInv, translatedV0);
+    matrix* newV1 = matrixMultiply(basisInv, translatedV1);
+    matrix* newV2 = matrixMultiply(basisInv, translatedV2);
     
-    // Tutkitaan, onko z-koordinaatit positiivisia
+    // Tutkitaan, ovatko z-koordinaatit positiivisia
     
     if(newV0->values[2][0] > 0 && 
             newV1->values[2][0] > 0 &&
             newV2->values[2][0] > 0) {
         deleteMatrix(basisInv);
+        deleteMatrix(translatedV0);
+        deleteMatrix(translatedV1);
+        deleteMatrix(translatedV2);
         deleteMatrix(newV0);
         deleteMatrix(newV1);
         deleteMatrix(newV2);
         return 1;
     }
     
+    deleteMatrix(translatedV0);
+    deleteMatrix(translatedV1);
+    deleteMatrix(translatedV2);
     deleteMatrix(basisInv);
     deleteMatrix(newV0);
     deleteMatrix(newV1);

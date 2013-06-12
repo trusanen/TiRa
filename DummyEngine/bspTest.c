@@ -49,14 +49,21 @@ void bspTest() {
     
     scene* scn = newScene();
     
-    //deleteObject(scn->objects->next);
+    object* cube = sceneNewObject(scn);
     
+    cube->mesh = newUnitCube(scn);
+    
+    objectRotate(cube, 0, M_PI, 0);
+    objectTranslate(cube, 0, -5, 0);
+    
+/*
     object* grid = sceneNewObject(scn);
 
     grid->mesh = newGrid(scn, 20, 20);
     
-    objectTranslate(grid, -10, -10, -1);
+    objectTranslate(grid, -10, -10, 2);
     //objectRotate(grid, M_PI/4, 0, M_PI/4);
+*/
     
     drawBSPTree(screen, scn);
     
