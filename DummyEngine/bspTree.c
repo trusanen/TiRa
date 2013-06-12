@@ -138,7 +138,7 @@ void resolveBSPTree(bspNode* root) {
     bspNode* next = root->front;
     
     while(next != NULL) {
-        if(!isInFrontOfPolygon(root->polygon, next->polygon)) {
+        if(!isInFrontOfPolygon(next->polygon, root->polygon)) {
             
 /*
             printf("polygon moved behind root:\n");
