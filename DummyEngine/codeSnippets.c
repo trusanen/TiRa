@@ -398,4 +398,119 @@ void mathematicsTest() {
     free(targetV2);
 }
 
+int isInsidePolygonOld(int x, int y, polygon* P) {
+    
+    // Testaa, onko piste (x, y) polygonin P (kolmion P)
+    // sisällä. Funktio tarkistaa, että P:n ikkuna-
+    // koordinaatit ovat laskettu ja x ja y ovat suurempia
+    // kuin nolla.
+    
+    // Funktio käyttää kolmioille räätälöityä "Crossing numbers"
+    // -algoritmia.
+    
+    assert(x >= 0 && y >= 0);
+    assert(P != NULL);
+    assert(P->verts[0]->window != NULL);
+    
+    // Tehdään listat x- ja y-koordinaateista
+    
+    float xs[4] = { P->verts[0]->window->values[0][0], 
+        P->verts[1]->window->values[0][0],
+        P->verts[2]->window->values[0][0],
+        P->verts[0]->window->values[0][0]
+        };
+    float ys[4] = { P->verts[0]->window->values[2][0], 
+        P->verts[1]->window->values[2][0],
+        P->verts[2]->window->values[2][0],
+        P->verts[0]->window->values[2][0]
+        };
+    
+    int crossings = 0;
+    float angle;
+    float isect;
+    
+    int i = 0;
+    
+    // Käydään läpi kaikki verteksien väliset viivat 
+    // (xs[i], ys[i]) -> (xs[i+1], ys[i+1])
+    
+    for(i ; i < 3 ; i++) {
+        
+        // Tarkistetaan, että piste löytyy viivan päätepisteiden
+        // x-koordinaattien vasemmalta puolelta ja että viiva
+        // ei ole vaakasuora.
+        
+        if((x <= xs[i] || x <= xs[i+1]) &&
+                ys[i] != ys[i+1]) {
+            
+            // Tarkistetaan, että x-koordinaatit ovat oikeinpäin
+            
+            if(xs[i+1] > xs[i]) {
+                
+                // Lasketaan kulmakerroin ja sitä kautta leikkauspiste
+                // suoran yhtälön avulla.
+                
+                angle = (ys[i+1]-ys[i]) / (xs[i+1]-xs[i]);
+                isect = angle*x - angle*xs[i] + ys[i];
+                
+                if(ys[i+1] > ys[i]) {
+                    // Viiva ylöspäinsuuntautuva
+
+                    if(y > isect && y < ys[i+1]) {
+                        crossings++;
+                    }
+                }
+                else {
+                    // Viiva alaspäinsuuntautuva
+
+                    if(y < isect && y > ys[i+1]) {
+                        crossings++;
+                    }
+                }
+            }
+            else if(xs[i+1] < xs[i]) {
+                
+                // Lasketaan kulmakerroin ja sitä kautta leikkauspiste
+                // suoran yhtälön avulla.
+                
+                angle = (ys[i]-ys[i+1]) / (xs[i]-xs[i+1]);
+                isect = angle*x - angle*xs[i] + ys[i];
+                
+                if(ys[i] > ys[i+1]) {
+                    // Viiva ylöspäinsuuntautuva
+
+                    if(y > isect && y < ys[i]) {
+                        crossings++;
+                    }
+                }
+                else {
+                    // Viiva alaspäinsuuntautuva
+
+                    if(y < isect && y > ys[i]) {
+                        crossings++;
+                    }
+                }
+            }
+            
+            // Jos x-koordinaatit ovat samat, tarkistetaan
+            // vain, että piste on niiden vasemmalla puolella
+            // ja päätepisteiden välissä.
+            
+            else {
+                if(x < xs[i] 
+                        && ((y < ys[i] && y > ys[i+1])
+                        || (y < ys[i+1] && y > ys[i]))
+                        ) {
+                    crossings++;
+                }
+            }
+        }
+    }
+    
+    // Palautetaan parillisuus, jos leikkauksia on parillinen määrä,
+    // on piste kolmion ulkopuolella, jos taas pariton, on piste
+    // kolmion sisällä.
+    
+    return crossings % 2;
+}
 */

@@ -121,21 +121,17 @@ void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
     
     assert(surface != NULL && P != NULL);
     
-    int screenWidth = surface->w;
-    int screenHeight = surface->h;
-    
     Uint32 white = 0xffffffff;
     Uint32 magenta = 0x00ff00ff;
     
-    // Polygonien kulmapisteet ruudulla. Huom! y-koordinaatti
-    // osoittaa kamerasta poispäin ja z-koordinaatti ylöspäin!
-
-    int x1 = screenWidth*0.5+(int)(P->verts[0]->NDC->values[0][0]*screenWidth*0.5+0.5);
-    int y1 = screenHeight*0.5+(int)(P->verts[0]->NDC->values[2][0]*screenHeight*0.5+0.5);
-    int x2 = screenWidth*0.5+(int)(P->verts[1]->NDC->values[0][0]*screenWidth*0.5+0.5);
-    int y2 = screenHeight*0.5+(int)(P->verts[1]->NDC->values[2][0]*screenHeight*0.5+0.5);
-    int x3 = screenWidth*0.5+(int)(P->verts[2]->NDC->values[0][0]*screenWidth*0.5+0.5);
-    int y3 = screenHeight*0.5+(int)(P->verts[2]->NDC->values[2][0]*screenHeight*0.5+0.5);
+    calculateWindowCoordinates(surface, P);
+    
+    float x1 = P->verts[0]->window->values[0][0];
+    float y1 = P->verts[0]->window->values[2][0];
+    float x2 = P->verts[1]->window->values[0][0];
+    float y2 = P->verts[1]->window->values[2][0];
+    float x3 = P->verts[2]->window->values[0][0];
+    float y3 = P->verts[2]->window->values[2][0];
     
     // Piirretään viivat
                 
@@ -151,120 +147,59 @@ void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
     
 }
 
+
+
 int isInsidePolygon(int x, int y, polygon* P) {
     
-    // Testaa, onko piste (x, y) polygonin P (kolmion P)
-    // sisällä. Funktio tarkistaa, että P:n ikkuna-
-    // koordinaatit ovat laskettu ja x ja y ovat suurempia
-    // kuin nolla.
-    
-    // Funktio käyttää kolmioille räätälöityä "Crossing numbers"
-    // -algoritmia.
+    // Funktio tarkistaa, winding numbers-menetelmää käyttäen,
+    // onko annettu piste polygonin P sisällä. Funktio tarkistaa,
+    // että x ja y ovat epänegatiivisia ja että polygonin osoitin
+    // ei ole tyhjä. Funktio myös vaatii sen, että P:n ikkuna-
+    // koordinaatit on laskettu.
     
     assert(x >= 0 && y >= 0);
     assert(P != NULL);
     assert(P->verts[0]->window != NULL);
     
-    // Tehdään listat x- ja y-koordinaateista
+    // Siirretään polygonin koordinaatit niin, että origoksi tulee
+    // piste (x, y)
     
-    float xs[4] = { P->verts[0]->window->values[0][0], 
-        P->verts[1]->window->values[0][0],
-        P->verts[2]->window->values[0][0],
-        P->verts[0]->window->values[0][0]
-        };
-    float ys[4] = { P->verts[0]->window->values[2][0], 
-        P->verts[1]->window->values[2][0],
-        P->verts[2]->window->values[2][0],
-        P->verts[0]->window->values[2][0]
-        };
+    float xs[] = {P->verts[0]->window->values[0][0] - x, 
+    P->verts[1]->window->values[0][0] - x,
+    P->verts[2]->window->values[0][0] - x,
+    P->verts[0]->window->values[0][0] - x
+    };
     
-    int crossings = 0;
-    float angle;
-    float isect;
+    float ys[] = {P->verts[0]->window->values[2][0] - y, 
+    P->verts[1]->window->values[2][0] - y,
+    P->verts[2]->window->values[2][0] - y,
+    P->verts[0]->window->values[2][0] - y
+    };
+    
+    int windingNumber = 0;
     
     int i = 0;
     
-    // Käydään läpi kaikki verteksien väliset viivat 
-    // (xs[i], ys[i]) -> (xs[i+1], ys[i+1])
-    
     for(i ; i < 3 ; i++) {
         
-        // Tarkistetaan, että piste löytyy viivan päätepisteiden
-        // x-koordinaattien vasemmalta puolelta ja että viiva
-        // ei ole vaakasuora.
+        // Tutkitaan, leikkaako viiva (v[i] -> v[i+1]) x-akselin
         
-        if((x <= xs[i] || x <= xs[i+1]) &&
-                ys[i] != ys[i+1]) {
+        if(ys[i]*ys[i+1] < 0) {
             
-            // Tarkistetaan, että x-koordinaatit ovat oikeinpäin
+            float isect = xs[i] + (ys[i]*(xs[i+1]-xs[i]))/(ys[i]-ys[i+1]);
             
-            if(xs[i+1] > xs[i]) {
-                
-                // Lasketaan kulmakerroin ja sitä kautta leikkauspiste
-                // suoran yhtälön avulla.
-                
-                angle = (ys[i+1]-ys[i]) / (xs[i+1]-xs[i]);
-                isect = angle*x - angle*xs[i] + ys[i];
-                
-                if(ys[i+1] > ys[i]) {
-                    // Viiva ylöspäinsuuntautuva
-
-                    if(y > isect && y < ys[i+1]) {
-                        crossings++;
-                    }
+            if(isect > 0) {
+                if(ys[i] > 0) {
+                    windingNumber++;
                 }
                 else {
-                    // Viiva alaspäinsuuntautuva
-
-                    if(y < isect && y > ys[i+1]) {
-                        crossings++;
-                    }
-                }
-            }
-            else if(xs[i+1] < xs[i]) {
-                
-                // Lasketaan kulmakerroin ja sitä kautta leikkauspiste
-                // suoran yhtälön avulla.
-                
-                angle = (ys[i]-ys[i+1]) / (xs[i]-xs[i+1]);
-                isect = angle*x - angle*xs[i] + ys[i];
-                
-                if(ys[i] > ys[i+1]) {
-                    // Viiva ylöspäinsuuntautuva
-
-                    if(y > isect && y < ys[i]) {
-                        crossings++;
-                    }
-                }
-                else {
-                    // Viiva alaspäinsuuntautuva
-
-                    if(y < isect && y > ys[i]) {
-                        crossings++;
-                    }
-                }
-            }
-            
-            // Jos x-koordinaatit ovat samat, tarkistetaan
-            // vain, että piste on niiden vasemmalla puolella
-            // ja päätepisteiden välissä.
-            
-            else {
-                if(x < xs[i] 
-                        && ((y < ys[i] && y > ys[i+1])
-                        || (y < ys[i+1] && y > ys[i]))
-                        ) {
-                    crossings++;
+                    windingNumber--;
                 }
             }
         }
     }
     
-    // Palautetaan parillisuus, jos leikkauksia on parillinen määrä,
-    // on piste kolmion ulkopuolella, jos taas pariton, on piste
-    // kolmion sisällä.
-    
-    return crossings % 2;
+    return windingNumber;
 }
 
 void calculateWindowCoordinates(SDL_Surface* surface, polygon* P) {
@@ -324,7 +259,6 @@ boundingBox* calculateBoundingBox(polygon* P) {
         if(bb->ymin > P->verts[i]->window->values[2][0]) {
             bb->ymin = P->verts[i]->window->values[2][0];
         }
-        
     }
     
     return bb;

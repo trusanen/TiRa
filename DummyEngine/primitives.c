@@ -31,8 +31,8 @@ mesh* newUnitCube(scene* scene) {
     
     polygon* back1 = meshNewPolygon(unitCube, NEU, NWU, NWL);
     polygon* back2 = meshNewPolygon(unitCube, NWL, NEL, NEU);
-    setPolygonColor(back1, 0x000f0f0f);
-    setPolygonColor(back2, 0x000f0f0f);
+    setPolygonColor(back1, 0x00ff00ff);
+    setPolygonColor(back2, 0x00ff00ff);
     
     polygon* right1 = meshNewPolygon(unitCube, SEU, NEU, NEL);
     polygon* right2 = meshNewPolygon(unitCube, NEL, SEL, SEU);

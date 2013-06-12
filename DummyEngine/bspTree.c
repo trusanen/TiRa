@@ -62,11 +62,13 @@ bspNode* createBSPTree(scene* scene) {
             
             // Lasketaan objektikohtainen muunnosmatriisi
             
-            world = matrixMultiply(camMatrix, obj->worldTransform);
-            fullTransform = matrixMultiply(world, obj->scaleTransform);
+            world = matrixMultiply(obj->worldTransform, obj->scaleTransform);
+            fullTransform = matrixMultiply(camMatrix, world);
             
             P = M->polygons;
             while(P != NULL) {
+                
+                calculateWorldCoordinates(P, world);
 
                 if(doBackfaceCulling(scene->camera, P)) {
 

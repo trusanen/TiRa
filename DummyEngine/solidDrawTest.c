@@ -23,21 +23,22 @@ void solidDrawTest() {
     
     scene* scn = newScene();
     
-    mesh* unitCubeMesh = scn->objects->next->mesh;
-    
     // Luodaan yksi pinkki polygoni
     
     object* triangle = sceneNewObject(scn);
     mesh* M1 = sceneNewMesh(scn);
     triangle->mesh = M1;
     
-    vertex* V1 = meshNewVertex(M1, -3.0, 7.0, 1.0);
-    vertex* V2 = meshNewVertex(M1, -3.0, 7.0, 3.0);
-    vertex* V3 = meshNewVertex(M1, -3.0, 9.0, 3.0);
+    vertex* V1 = meshNewVertex(M1, 0, 0, 0);
+    vertex* V2 = meshNewVertex(M1, 0, 0, 2);
+    vertex* V3 = meshNewVertex(M1, 0, 2, 2);
     
     polygon* P = meshNewPolygon(M1, V1, V2, V3);
     
     setPolygonColor(P, 0x00ff00ff);
+    
+    objectTranslate(triangle, -3, -7, 1);
+    objectRotate(triangle, 0, 0, -M_PI);
     
     // Luodaan ruudukko
     
@@ -60,9 +61,8 @@ void solidDrawTest() {
     
     object* cube = sceneNewObject(scn);
     cube->mesh = newUnitCube(scn);
-    //cube->mesh = unitCubeMesh;
     
-    objectRotate(cube, 0, 0, M_PI/2);
+    objectRotate(cube, 0, 0, M_PI);
     objectTranslate(cube, 0, -5, 0);
     
     drawSceneSolid(screen, scn);
