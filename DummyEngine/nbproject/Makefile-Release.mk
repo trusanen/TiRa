@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/73483906/matrix.o \
 	${OBJECTDIR}/_ext/73483906/solidDrawTest.o \
 	${OBJECTDIR}/_ext/73483906/backfaceCullingTest.o \
+	${OBJECTDIR}/_ext/73483906/bspTree.o \
 	${OBJECTDIR}/_ext/73483906/matrixTest.o \
 	${OBJECTDIR}/_ext/73483906/scene.o \
 	${OBJECTDIR}/_ext/73483906/normalTest.o \
@@ -51,8 +52,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/73483906/mesh.o \
 	${OBJECTDIR}/_ext/73483906/mathematics.o \
 	${OBJECTDIR}/_ext/73483906/draw.o \
-	${OBJECTDIR}/_ext/73483906/polygonTest.o \
 	${OBJECTDIR}/_ext/73483906/md2ImportTest.o \
+	${OBJECTDIR}/_ext/73483906/bspTest.o \
+	${OBJECTDIR}/_ext/73483906/polygonTest.o \
 	${OBJECTDIR}/_ext/73483906/sdltest.o
 
 
@@ -125,6 +127,11 @@ ${OBJECTDIR}/_ext/73483906/backfaceCullingTest.o: /home/topias/TiRa/TiRa/DummyEn
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/backfaceCullingTest.o /home/topias/TiRa/TiRa/DummyEngine/backfaceCullingTest.c
 
+${OBJECTDIR}/_ext/73483906/bspTree.o: /home/topias/TiRa/TiRa/DummyEngine/bspTree.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/bspTree.o /home/topias/TiRa/TiRa/DummyEngine/bspTree.c
+
 ${OBJECTDIR}/_ext/73483906/matrixTest.o: /home/topias/TiRa/TiRa/DummyEngine/matrixTest.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
@@ -165,15 +172,20 @@ ${OBJECTDIR}/_ext/73483906/draw.o: /home/topias/TiRa/TiRa/DummyEngine/draw.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/draw.o /home/topias/TiRa/TiRa/DummyEngine/draw.c
 
-${OBJECTDIR}/_ext/73483906/polygonTest.o: /home/topias/TiRa/TiRa/DummyEngine/polygonTest.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/polygonTest.o /home/topias/TiRa/TiRa/DummyEngine/polygonTest.c
-
 ${OBJECTDIR}/_ext/73483906/md2ImportTest.o: /home/topias/TiRa/TiRa/DummyEngine/md2ImportTest.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/md2ImportTest.o /home/topias/TiRa/TiRa/DummyEngine/md2ImportTest.c
+
+${OBJECTDIR}/_ext/73483906/bspTest.o: /home/topias/TiRa/TiRa/DummyEngine/bspTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/bspTest.o /home/topias/TiRa/TiRa/DummyEngine/bspTest.c
+
+${OBJECTDIR}/_ext/73483906/polygonTest.o: /home/topias/TiRa/TiRa/DummyEngine/polygonTest.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/73483906
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/73483906/polygonTest.o /home/topias/TiRa/TiRa/DummyEngine/polygonTest.c
 
 ${OBJECTDIR}/_ext/73483906/sdltest.o: /home/topias/TiRa/TiRa/DummyEngine/sdltest.c 
 	${MKDIR} -p ${OBJECTDIR}/_ext/73483906

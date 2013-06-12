@@ -1,4 +1,7 @@
 void runTests() {
+    
+    // Tämä funktio ajaa kaikki testit.
+    
     matrixTest();
     
     mathematicsTest();
@@ -17,5 +20,7 @@ void runTests() {
     
     solidDrawTest();
     
-    md2ImportTest();
+    bspTest();
+    
+    //md2ImportTest();
 }

@@ -8,11 +8,21 @@
 #ifndef BSPTREE_H
 #define	BSPTREE_H
 
+#include "scene.h"
+
 typedef struct bspNode_t {
-    polygon* P;
-    bspNode_t* front;
-    bspNode_t* behind;
+    polygon* polygon;
+    matrix* fullTransform;
+    struct bspNode_t* front;
+    struct bspNode_t* behind;
 } bspNode;
+
+bspNode* createBSPNode(polygon* P, matrix* fullTransform);
+void addNodeFront(bspNode* behind, bspNode* front);
+void addNodeBehind(bspNode* behind, bspNode* front);
+bspNode* createBSPTree(scene* scene);
+void resolveBSPTree(bspNode* root);
+void travelBSPTree(bspNode* root, SDL_Surface* surface);
 
 #ifdef	__cplusplus
 extern "C" {

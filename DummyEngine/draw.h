@@ -36,6 +36,7 @@ void drawMeshWireframe(SDL_Surface* surface, mesh* M);
 void drawSceneWireframe(SDL_Surface* surface, scene* scene);
 void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene);
 void drawSceneSolid(SDL_Surface* surface, scene* scene);
+void drawBSPTree(SDL_Surface* surface, scene* scene);
 
 #ifdef	__cplusplus
 extern "C" {

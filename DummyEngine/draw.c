@@ -3,6 +3,7 @@
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
+#include "bspTree.h"
 
 void putPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
     
@@ -570,4 +571,21 @@ void drawSceneSolid(SDL_Surface* surface, scene* scene) {
     }
     
     deleteMatrix(camMatrix);
+}
+
+void drawBSPTree(SDL_Surface* surface, scene* scene) {
+    
+    // Piirtää tilan käyttäen BSP-puuta polygonien järjestämiseen.
+    
+    assert(surface != NULL && scene != NULL);
+    
+    if(scene->camera == NULL) {
+        printf("No camera assigned! Stopping render.");
+        return;
+    }
+    
+    bspNode* root = createBSPTree(scene);
+    
+    travelBSPTree(root, surface);
+
 }
