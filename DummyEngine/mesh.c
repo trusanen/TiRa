@@ -147,11 +147,57 @@ matrix* calculatePolygonNormal(polygon* P) {
             - P->verts[0]->coords->values[2][0];
     
     v->values[0][0] = P->verts[2]->coords->values[0][0] 
-            - P->verts[1]->coords->values[0][0];
+            - P->verts[0]->coords->values[0][0];
     v->values[1][0] = P->verts[2]->coords->values[1][0] 
-            - P->verts[1]->coords->values[1][0];
+            - P->verts[0]->coords->values[1][0];
     v->values[2][0] = P->verts[2]->coords->values[2][0] 
-            - P->verts[1]->coords->values[2][0];
+            - P->verts[0]->coords->values[2][0];
+    
+    // Lasketaan normaali
+    
+    matrix* normal = newMatrix(4, 1);
+    
+    normal->values[0][0] = -u->values[1][0]*v->values[2][0] 
+            + u->values[2][0]*v->values[1][0];
+    normal->values[1][0] = -u->values[2][0]*v->values[0][0] 
+            + u->values[0][0]*v->values[2][0];
+    normal->values[2][0] = -u->values[0][0]*v->values[1][0] 
+            + u->values[1][0]*v->values[0][0];
+    normal->values[3][0] = 1;
+    
+    deleteMatrix(u);
+    deleteMatrix(v);
+    
+    return normal;
+}
+
+matrix* calculatePolygonWorldNormal(polygon* P) {
+    
+    // Laskee polygonin normaalin tila-avaruudessa (world space) ja
+    // sijoittaa sen polygonin keskelle. Verteksien tulee olla 
+    // määritelty myötäpäivään pinnan normaalin suhteen. Tarkistaa, 
+    // että osoitin ei ole tyhjä.
+    
+    assert(P != NULL);
+    
+    matrix* u = newMatrix(3,1);
+    matrix* v = newMatrix(3,1);
+    
+    // Määritellään vektorit u ja v, jotka määrittävät tason
+    
+    u->values[0][0] = P->verts[1]->world->values[0][0] 
+            - P->verts[0]->world->values[0][0];
+    u->values[1][0] = P->verts[1]->world->values[1][0] 
+            - P->verts[0]->world->values[1][0];
+    u->values[2][0] = P->verts[1]->world->values[2][0] 
+            - P->verts[0]->world->values[2][0];
+    
+    v->values[0][0] = P->verts[2]->world->values[0][0] 
+            - P->verts[0]->world->values[0][0];
+    v->values[1][0] = P->verts[2]->world->values[1][0] 
+            - P->verts[0]->world->values[1][0];
+    v->values[2][0] = P->verts[2]->world->values[2][0] 
+            - P->verts[0]->world->values[2][0];
     
     // Lasketaan normaali
     

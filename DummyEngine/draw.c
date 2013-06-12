@@ -332,10 +332,12 @@ boundingBox* calculateBoundingBox(polygon* P) {
 
 void drawPolygonSolid(SDL_Surface* surface, polygon* P) {
     
-    // Piirtää polygonin umpinaisena, tarkistaa, että annetut
-    // osoittimet eivät ole tyhjiä.
+    // Piirtää polygonin umpinaisena. Funktio olettaa, että
+    // polygonin normalisoidut koordinaatit ovat laskettu. 
+    // Tarkistaa, että annetut osoittimet eivät ole tyhjiä.
     
     assert(surface != NULL && P != NULL);
+    assert(P->verts[0]->NDC != NULL);
     
     calculateWindowCoordinates(surface, P);
     
@@ -362,30 +364,37 @@ void drawPolygonSolid(SDL_Surface* surface, polygon* P) {
 
 int doBackfaceCulling(camera* cam, polygon* P) {
     
-    // Tutkii, osoittaako polygoni kameraan päin.
+    // Tutkii, osoittaako polygoni kameraan päin. Funktio vaatii,
+    // että polygonin verteksien maailmakoordinaatit on laskettu.
     // Tarkistaa, etteivät osoittimet ole tyhjiä.
     
     assert(cam != NULL && P != NULL);
+    assert(P->verts[0]->world != NULL);
     
     // Luodaan vektori, joka osoittaa kamerasta tutkittavan
     // polygonin ensimmäiseen verteksiin.
     
     matrix* camToPolygon = newMatrix(4,1);
     
-    camToPolygon->values[0][0] = P->verts[0]->coords->values[0][0] - 
+    camToPolygon->values[0][0] = P->verts[0]->world->values[0][0] - 
             cam->cameraObj->worldTransform->values[0][3];
-    camToPolygon->values[1][0] = P->verts[0]->coords->values[1][0] - 
+    camToPolygon->values[1][0] = P->verts[0]->world->values[1][0] - 
             cam->cameraObj->worldTransform->values[1][3];
-    camToPolygon->values[2][0] = P->verts[0]->coords->values[2][0] - 
+    camToPolygon->values[2][0] = P->verts[0]->world->values[2][0] - 
             cam->cameraObj->worldTransform->values[2][3];
     camToPolygon->values[3][0] = 1;
+    
+    // Lasketaan polygonin normaali tila-avaruudessa (world space)
+    
+    matrix* normal = calculatePolygonWorldNormal(P);
     
     // Lasketaan kamerasta polygonin ensimmäiseen verteksiin osoittavan
     // vektorin ja muunnetun normaalivektorin sisätulo.
     
-    float dotProduct = vectorDotProduct(camToPolygon, P->normal);
+    float dotProduct = vectorDotProduct(camToPolygon, normal);
     
     deleteMatrix(camToPolygon);
+    deleteMatrix(normal);
     
     if(dotProduct < 0) {
         return 1;
@@ -484,14 +493,16 @@ void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
             
             // Lasketaan objektikohtainen muunnosmatriisi
             
-            world = matrixMultiply(camMatrix, obj->worldTransform);
-            fullTransform = matrixMultiply(world, obj->scaleTransform);
+            world = matrixMultiply(obj->worldTransform, obj->scaleTransform);
+            fullTransform = matrixMultiply(camMatrix, world);
             
             polygon* P = obj->mesh->polygons;
             
             while(P != NULL) {
                 
-                if(doBackfaceCulling(scene->camera, P, world)) {
+                calculateWorldCoordinates(P, world);
+                
+                if(doBackfaceCulling(scene->camera, P)) {
                     
                     // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
 
@@ -546,14 +557,16 @@ void drawSceneSolid(SDL_Surface* surface, scene* scene) {
             
             // Lasketaan objektikohtainen muunnosmatriisi
             
-            world = matrixMultiply(camMatrix, obj->worldTransform);
-            fullTransform = matrixMultiply(world, obj->scaleTransform);
+            world = matrixMultiply(obj->worldTransform, obj->scaleTransform);
+            fullTransform = matrixMultiply(camMatrix, world);
             
             polygon* P = obj->mesh->polygons;
             
             while(P != NULL) {
                 
-                if(doBackfaceCulling(scene->camera, P, world)) {
+                calculateWorldCoordinates(P, world);
+                
+                if(doBackfaceCulling(scene->camera, P)) {
                     
                     // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
 

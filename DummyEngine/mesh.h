@@ -44,6 +44,7 @@ polygon* meshNewPolygon(mesh* M, vertex* A, vertex* B, vertex* C);
 void deletePolygon(polygon* P);
 void setPolygonColor(polygon* P, Uint32 color);
 matrix* calculatePolygonNormal(polygon* P);
+matrix* calculatePolygonWorldNormal(polygon* P);
 void calculateWorldCoordinates(polygon* P, matrix* worldTransform);
 void calculateNormalizedDeviceCoordinates(polygon* P, matrix* fullTransform);
 
