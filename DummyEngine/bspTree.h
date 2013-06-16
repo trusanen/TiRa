@@ -22,7 +22,7 @@ void addNodeFront(bspNode* behind, bspNode* front);
 void addNodeBehind(bspNode* behind, bspNode* front);
 bspNode* createBSPTree(scene* scene);
 void resolveBSPTree(bspNode* root);
-void travelBSPTree(bspNode* root, SDL_Surface* surface);
+void travelBSPTree(bspNode* root, scene* scene, SDL_Surface* surface);
 
 #ifdef	__cplusplus
 extern "C" {

@@ -69,8 +69,11 @@ bspNode* createBSPTree(scene* scene) {
             while(P != NULL) {
                 
                 calculateWorldCoordinates(P, world);
-
+                
                 if(doBackfaceCulling(scene->camera, P)) {
+                
+                    // Luodaan alkio BSP-puuhun, jos polygoni osoittaa
+                    // kameraan päin.
 
                     node = createBSPNode(P, fullTransform);
 
@@ -83,13 +86,15 @@ bspNode* createBSPTree(scene* scene) {
                     }
                     prevNode = node;
                 }
+                
                 P = P->next;
             }
         }
         obj = obj->next;
     }
     
-    // Ratkaistaan nyt BSP-puu rekursiivisella kutsulla
+    // Asetetaan alkiot oikeaan järjestykseen rekursiivisella
+    // kutsulla
     
     resolveBSPTree(root);
     return root;
@@ -118,43 +123,11 @@ void resolveBSPTree(bspNode* root) {
         return;
     }
     
-/*
-    printf("root:\n");
-    printf("V1 coords: x=%f, y=%f, z=%f\n", 
-            root->polygon->verts[0]->coords->values[0][0],
-            root->polygon->verts[0]->coords->values[1][0],
-            root->polygon->verts[0]->coords->values[2][0]);
-    printf("V2 coords: x=%f, y=%f, z=%f\n", 
-            root->polygon->verts[1]->coords->values[0][0],
-            root->polygon->verts[1]->coords->values[1][0],
-            root->polygon->verts[1]->coords->values[2][0]);
-    printf("V3 coords: x=%f, y=%f, z=%f\n", 
-            root->polygon->verts[2]->coords->values[0][0],
-            root->polygon->verts[2]->coords->values[1][0],
-            root->polygon->verts[2]->coords->values[2][0]);
-*/
-    
     bspNode* prev = root;
     bspNode* next = root->front;
     
     while(next != NULL) {
         if(!isInFrontOfPolygon(next->polygon, root->polygon)) {
-            
-/*
-            printf("polygon moved behind root:\n");
-            printf("V1 coords: x=%f, y=%f, z=%f\n", 
-                    next->polygon->verts[0]->coords->values[0][0],
-                    next->polygon->verts[0]->coords->values[1][0],
-                    next->polygon->verts[0]->coords->values[2][0]);
-            printf("V2 coords: x=%f, y=%f, z=%f\n", 
-                    next->polygon->verts[1]->coords->values[0][0],
-                    next->polygon->verts[1]->coords->values[1][0],
-                    next->polygon->verts[1]->coords->values[2][0]);
-            printf("V3 coords: x=%f, y=%f, z=%f\n", 
-                    next->polygon->verts[2]->coords->values[0][0],
-                    next->polygon->verts[2]->coords->values[1][0],
-                    next->polygon->verts[2]->coords->values[2][0]);
-*/
             
             prev->front = next->front;
             
@@ -189,7 +162,7 @@ void addNodeBehind(bspNode* front, bspNode* behind) {
     }
 }
 
-void travelBSPTree(bspNode* root, SDL_Surface* surface) {
+void travelBSPTree(bspNode* root, scene* scene, SDL_Surface* surface) {
     
     // Käy rekursiivisesti BSP-puun läpi sisäjärjestyksessä.
     // Funktio tarkistaa, että annettu osoitin ei ole tyhjä.
@@ -198,13 +171,15 @@ void travelBSPTree(bspNode* root, SDL_Surface* surface) {
         return;
     }
     
-    travelBSPTree(root->behind, surface);
+    travelBSPTree(root->behind, scene, surface);
+
+    // Lasketaan polygonin normalisoidut koordinaatit
+
+    calculateNormalizedDeviceCoordinates(root->polygon, root->fullTransform);
     
     // Piirretään polygoni
     
-    calculateNormalizedDeviceCoordinates(root->polygon, root->fullTransform);
-        
     drawPolygonSolid(surface, root->polygon);
     
-    travelBSPTree(root->front, surface);
+    travelBSPTree(root->front, scene, surface);
 }

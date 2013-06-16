@@ -10,7 +10,7 @@ void runTests() {
     
     //polygonTest();
     
-    sdlTest();
+    //sdlTest();
             
     sceneTest();
     

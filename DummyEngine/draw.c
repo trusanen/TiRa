@@ -11,7 +11,9 @@ void putPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
     
     Uint32* pixels = (Uint32*)surface->pixels;
     
-    pixels[((surface->h - y) * surface->w) + x] = color;
+    if(x >= 0 && y >= 0 && x < surface->w && y < surface->h) {
+        pixels[((surface->h - y) * surface->w) + x] = color;
+    }
     
 }
 
@@ -147,17 +149,13 @@ void drawPolygonWireframe(SDL_Surface* surface, polygon* P) {
     
 }
 
-
-
 int isInsidePolygon(int x, int y, polygon* P) {
     
     // Funktio tarkistaa, winding numbers-menetelmää käyttäen,
     // onko annettu piste polygonin P sisällä. Funktio tarkistaa,
-    // että x ja y ovat epänegatiivisia ja että polygonin osoitin
-    // ei ole tyhjä. Funktio myös vaatii sen, että P:n ikkuna-
-    // koordinaatit on laskettu.
+    // että polygonin osoitin ei ole tyhjä. Funktio myös vaatii 
+    // sen, että P:n ikkunakoordinaatit on laskettu.
     
-    assert(x >= 0 && y >= 0);
     assert(P != NULL);
     assert(P->verts[0]->window != NULL);
     
@@ -182,7 +180,7 @@ int isInsidePolygon(int x, int y, polygon* P) {
     
     for(i ; i < 3 ; i++) {
         
-        // Tutkitaan, leikkaako viiva (v[i] -> v[i+1]) x-akselin
+        // Tutkitaan, leikkaako viiva (v[i] -> v[i+1]) positiivisen x-akselin
         
         if(ys[i]*ys[i+1] < 0) {
             
@@ -199,6 +197,9 @@ int isInsidePolygon(int x, int y, polygon* P) {
         }
     }
     
+    // Jos piste on polygonin sisällä, saa windingNumber nollasta
+    // poikkeavan arvon, jos taas ulkopuolella, windingNumber on nolla.
+    
     return windingNumber;
 }
 
@@ -206,9 +207,11 @@ void calculateWindowCoordinates(SDL_Surface* surface, polygon* P) {
     
     // Laskee polygonin vertekseille niiden ikkunakoordinaatit
     // eli sijainnin ruudulla. Tarkistaa, että osoittimet eivät
-    // ole tyhjiä.
+    // ole tyhjiä. Funktio olettaa, että polygonin normalisoidut
+    // koordinaatit ovat laskettu.
     
     assert(surface != NULL && P != NULL);
+    assert(P->verts[0]->NDC != NULL);
     
     int screenWidth = surface->w;
     int screenHeight = surface->h;
@@ -330,6 +333,9 @@ int doBackfaceCulling(camera* cam, polygon* P) {
     deleteMatrix(camToPolygon);
     deleteMatrix(normal);
     
+    // Jos sisätulo on negatiivinen, on vektorien välinen kulma
+    // yli 90 astetta jompaan kumpaan suuntaan, joten sitä ei piirretä.
+    
     if(dotProduct < 0) {
         return 1;
     }
@@ -436,6 +442,9 @@ void drawSceneWireframeBackfaceCulling(SDL_Surface* surface, scene* scene) {
                 
                 calculateWorldCoordinates(P, world);
                 
+                // Piirretään polygoni, jos se osoittaa kameraan
+                // päin.
+                
                 if(doBackfaceCulling(scene->camera, P)) {
                     
                     // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
@@ -500,6 +509,9 @@ void drawSceneSolid(SDL_Surface* surface, scene* scene) {
                 
                 calculateWorldCoordinates(P, world);
                 
+                // Piirretään polygoni, jos se osoittaa kameraan
+                // päin.
+                
                 if(doBackfaceCulling(scene->camera, P)) {
                     
                     // Lasketaan polygonin verteksien koordinaatit ruudulla (NDC)
@@ -526,6 +538,7 @@ void drawSceneSolid(SDL_Surface* surface, scene* scene) {
 void drawBSPTree(SDL_Surface* surface, scene* scene) {
     
     // Piirtää tilan käyttäen BSP-puuta polygonien järjestämiseen.
+    // Tarkistaa, että osoittimet eivät ole tyhjiä.
     
     assert(surface != NULL && scene != NULL);
     
@@ -534,9 +547,11 @@ void drawBSPTree(SDL_Surface* surface, scene* scene) {
         return;
     }
     
+    // Luodaan BSP-puu ja käydään se läpi sisäjärjestyksessä.
+    
     bspNode* root = createBSPTree(scene);
     
-    travelBSPTree(root, surface);
+    travelBSPTree(root, scene, surface);
 
     deleteBSPTree(root);
 }
