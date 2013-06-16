@@ -1,5 +1,5 @@
-#include "mesh.h"
-#include "matrix.h"
+#include "Header files/mesh.h"
+#include "Header files/matrix.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

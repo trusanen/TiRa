@@ -4,15 +4,14 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/bspTree.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/codeSnippets.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/draw.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mathematics.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrix.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/md2Loader.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mesh.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/primitives.h</itemPath>
-      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/scene.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/bspTree.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/draw.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/mathematics.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/matrix.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/md2Loader.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/mesh.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/primitives.h</itemPath>
+      <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Header files/scene.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -22,17 +21,17 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="Test Files" projectFiles="true">
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/backfaceCullingTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/bspTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/mathematicsTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/matrixTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/md2ImportTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/meshTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/normalTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/polygonTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/sceneTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/solidDrawTest.c</itemPath>
-        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/testMain.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/backfaceCullingTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/bspTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/mathematicsTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/matrixTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/md2ImportTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/meshTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/normalTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/polygonTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/sceneTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/solidDrawTest.c</itemPath>
+        <itemPath>/home/topias/TiRa/TiRa/DummyEngine/Test Files/testMain.c</itemPath>
       </logicalFolder>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/bspTree.c</itemPath>
       <itemPath>/home/topias/TiRa/TiRa/DummyEngine/codeSnippets.c</itemPath>

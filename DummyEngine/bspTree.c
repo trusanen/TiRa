@@ -1,8 +1,8 @@
-#include "bspTree.h"
-#include "scene.h"
+#include "Header files/bspTree.h"
+#include "Header files/scene.h"
 #include <stdlib.h>
 #include <assert.h>
-#include "mathematics.h"
+#include "Header files/mathematics.h"
 
 bspNode* createBSPNode(polygon* P, matrix* fullTransform) {
     
@@ -156,14 +156,18 @@ void addNodeBehind(bspNode* front, bspNode* behind) {
 
 void travelBSPTree(bspNode* root, scene* scene, SDL_Surface* surface) {
     
-    // Käy rekursiivisesti BSP-puun läpi sisäjärjestyksessä.
-    // Funktio tarkistaa, että annettu osoitin ei ole tyhjä.
+    // Käy rekursiivisesti BSP-puun läpi sisäjärjestyksessä ja piirtää
+    // kaikki polygonit. Funktio tarkistaa, että annettu osoitin ei ole tyhjä.
     
     if(root == NULL) {
         return;
     }
     
-    if(cameraInFrontOfNode(scene->camera, root)) {
+    // Jos kamera on polygonin edessä, piirretään ensin polygonit, jotka
+    // ovat tutkittavan polygonin takana. Jos taas kamera on tutkittavan
+    // polygonin takana, piirretään edessä olevat polygonit ensin.
+    
+    if(cameraInFrontOfPolygon(scene->camera, root->polygon)) {
         
         travelBSPTree(root->behind, scene, surface);
 
@@ -190,26 +194,4 @@ void travelBSPTree(bspNode* root, scene* scene, SDL_Surface* surface) {
 
         travelBSPTree(root->behind, scene, surface);
     }
-}
-
-int cameraInFrontOfNode(camera* camera, bspNode* node) {
-    
-    // Funktio tarkistaa, onko kamera polygonin etupuolella.
-    // Funktio tarkistaa, että osoittimet eivät ole tyhjiä.
-    
-    assert(camera != NULL && node != NULL);
-    
-    matrix* coords = newMatrix(4, 1);
-    
-    coords->values[0][0] = camera->cameraObj->worldTransform->values[0][3];
-    coords->values[1][0] = camera->cameraObj->worldTransform->values[1][3];
-    coords->values[2][0] = camera->cameraObj->worldTransform->values[2][3];
-    coords->values[3][0] = 1;
-    
-    if(pointInFrontOfPolygon(node->polygon, coords)) {
-        deleteMatrix(coords);
-        return 1;
-    }
-    deleteMatrix(coords);
-    return 0;
 }

@@ -1,7 +1,7 @@
-#include "mathematics.h"
+#include "Header files/mathematics.h"
 #include <assert.h>
 #include <stdlib.h>
-#include "matrix.h"
+#include "Header files/matrix.h"
 
 int pointInFrontOfPolygon(polygon* P, matrix* coords) {
     

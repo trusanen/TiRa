@@ -1,9 +1,9 @@
-#include "draw.h"
-#include "scene.h"
+#include "Header files/draw.h"
+#include "Header files/scene.h"
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
-#include "bspTree.h"
+#include "Header files/bspTree.h"
 
 void putPixel(SDL_Surface* surface, int x, int y, Uint32 color) {
     
@@ -187,6 +187,10 @@ int isInsidePolygon(int x, int y, polygon* P) {
             float isect = xs[i] + (ys[i]*(xs[i+1]-xs[i]))/(ys[i]-ys[i+1]);
             
             if(isect > 0) {
+                
+                // Jos leikkaa, kasvatetaan windingNumberia, jos viiva
+                // kulkee ylhäältä alas ja pienennetään, jos alhaalta ylös.
+                
                 if(ys[i] > 0) {
                     windingNumber++;
                 }
@@ -368,8 +372,8 @@ void drawSceneWireframe(SDL_Surface* surface, scene* scene) {
             
             // Lasketaan objektikohtainen muunnosmatriisi
             
-            world = matrixMultiply(camMatrix, obj->worldTransform);
-            fullTransform = matrixMultiply(world, obj->scaleTransform);
+            world = matrixMultiply(obj->worldTransform, obj->scaleTransform);
+            fullTransform = matrixMultiply(camMatrix, world);
             
             polygon* P = obj->mesh->polygons;
             

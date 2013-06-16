@@ -1,7 +1,7 @@
-#include "matrix.h"
+#include "Header files/matrix.h"
 #include <assert.h>
 #include <math.h>
-#include "primitives.h"
+#include "Header files/primitives.h"
 
 object* sceneNewObject(scene* scene) {
     
@@ -391,5 +391,27 @@ matrix* getViewMatrix(camera* cam) {
     deleteMatrix(Sinverse);
     
     return viewMatrixFinal;
+}
+
+int cameraInFrontOfPolygon(camera* camera, polygon* P) {
+    
+    // Funktio tarkistaa, onko kamera polygonin etupuolella.
+    // Funktio tarkistaa, että osoittimet eivät ole tyhjiä.
+    
+    assert(camera != NULL && P != NULL);
+    
+    matrix* coords = newMatrix(4, 1);
+    
+    coords->values[0][0] = camera->cameraObj->worldTransform->values[0][3];
+    coords->values[1][0] = camera->cameraObj->worldTransform->values[1][3];
+    coords->values[2][0] = camera->cameraObj->worldTransform->values[2][3];
+    coords->values[3][0] = 1;
+    
+    if(pointInFrontOfPolygon(P, coords)) {
+        deleteMatrix(coords);
+        return 1;
+    }
+    deleteMatrix(coords);
+    return 0;
 }
 
