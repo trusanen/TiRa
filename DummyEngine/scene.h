@@ -48,6 +48,7 @@ scene* newScene();
 void deleteScene(scene* scene);
 
 mesh* sceneNewMesh(scene* scene);
+matrix* calculateCameraMatrix(scene* scene);
 
 void addObject(scene* scene, object* obj);
 void addMesh(scene* scene, mesh* M);

@@ -34,12 +34,7 @@ bspNode* createBSPTree(scene* scene) {
     
     // Lasketaan kameramatriisi
     
-    matrix* camMatrix;
-    
-    matrix* viewMatrix = getViewMatrix(scene->camera);
-    matrix* projMatrix = scene->camera->perspectiveMatrix;
-    
-    camMatrix = matrixMultiply(projMatrix, viewMatrix);
+    matrix* camMatrix = calculateCameraMatrix(scene);
     
     matrix* world;
     matrix* fullTransform;

@@ -249,6 +249,27 @@ mesh* sceneNewMesh(scene* scene) {
     return M;
 }
 
+matrix* calculateCameraMatrix(scene* scene) {
+    
+    // Funktio laskee kameramatriisin eli näkymä- ja projektiomatriisin
+    // tulon. Tarkistaa, että osoitin ei ole tyhjä.
+    
+    assert(scene != NULL);
+    
+    // Lasketaan kameramatriisi
+    
+    matrix* camMatrix;
+    
+    matrix* viewMatrix = getViewMatrix(scene->camera);
+    matrix* projMatrix = scene->camera->perspectiveMatrix;
+    
+    camMatrix = matrixMultiply(projMatrix, viewMatrix);
+    
+    deleteMatrix(viewMatrix);
+    
+    return camMatrix;
+}
+
 void addObject(scene* scene, object* obj) {
     
     // Lisää objektin tilaan, tarkistaa, että osoittimet eivät ole
