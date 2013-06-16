@@ -10,6 +10,7 @@
 
 #include "mesh.h"
 
+int pointInFrontOfPolygon(polygon* P, matrix* coords);
 int isInFrontOfPolygon(polygon* target, polygon* origin);
 
 #ifdef	__cplusplus

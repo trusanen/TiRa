@@ -65,22 +65,19 @@ bspNode* createBSPTree(scene* scene) {
                 
                 calculateWorldCoordinates(P, world);
                 
-                if(doBackfaceCulling(scene->camera, P)) {
-                
-                    // Luodaan alkio BSP-puuhun, jos polygoni osoittaa
-                    // kameraan päin.
+                // Luodaan alkio BSP-puuhun, jos polygoni osoittaa
+                // kameraan päin.
 
-                    node = createBSPNode(P, fullTransform);
+                node = createBSPNode(P, fullTransform);
 
-                    if(root == NULL) {
-                        root = node;
-                    }
-
-                    if(prevNode != NULL) {
-                        prevNode->front = node;
-                    }
-                    prevNode = node;
+                if(root == NULL) {
+                    root = node;
                 }
+
+                if(prevNode != NULL) {
+                    prevNode->front = node;
+                }
+                prevNode = node;
                 
                 P = P->next;
             }
@@ -166,15 +163,53 @@ void travelBSPTree(bspNode* root, scene* scene, SDL_Surface* surface) {
         return;
     }
     
-    travelBSPTree(root->behind, scene, surface);
+    if(cameraInFrontOfNode(scene->camera, root)) {
+        
+        travelBSPTree(root->behind, scene, surface);
 
-    // Lasketaan polygonin normalisoidut koordinaatit
+        // Lasketaan polygonin normalisoidut koordinaatit
 
-    calculateNormalizedDeviceCoordinates(root->polygon, root->fullTransform);
+        calculateNormalizedDeviceCoordinates(root->polygon, root->fullTransform);
+
+        // Piirretään polygoni
+
+        drawPolygonSolid(surface, root->polygon);
+
+        travelBSPTree(root->front, scene, surface);
+    }
+    else {
+        travelBSPTree(root->front, scene, surface);
+
+        // Lasketaan polygonin normalisoidut koordinaatit
+
+        calculateNormalizedDeviceCoordinates(root->polygon, root->fullTransform);
+
+        // Piirretään polygoni
+
+        drawPolygonSolid(surface, root->polygon);
+
+        travelBSPTree(root->behind, scene, surface);
+    }
+}
+
+int cameraInFrontOfNode(camera* camera, bspNode* node) {
     
-    // Piirretään polygoni
+    // Funktio tarkistaa, onko kamera polygonin etupuolella.
+    // Funktio tarkistaa, että osoittimet eivät ole tyhjiä.
     
-    drawPolygonSolid(surface, root->polygon);
+    assert(camera != NULL && node != NULL);
     
-    travelBSPTree(root->front, scene, surface);
+    matrix* coords = newMatrix(4, 1);
+    
+    coords->values[0][0] = camera->cameraObj->worldTransform->values[0][3];
+    coords->values[1][0] = camera->cameraObj->worldTransform->values[1][3];
+    coords->values[2][0] = camera->cameraObj->worldTransform->values[2][3];
+    coords->values[3][0] = 1;
+    
+    if(pointInFrontOfPolygon(node->polygon, coords)) {
+        deleteMatrix(coords);
+        return 1;
+    }
+    deleteMatrix(coords);
+    return 0;
 }

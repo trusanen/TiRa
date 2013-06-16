@@ -21,12 +21,12 @@ void mathematicsTest() {
     V0->world->values[1][0] = 3;
     V0->world->values[2][0] = 2;
     V0->world->values[3][0] = 1;
-    
+
     V1->world->values[0][0] = 1;
     V1->world->values[1][0] = 3;
     V1->world->values[2][0] = 3;
     V1->world->values[3][0] = 1;
-    
+
     V2->world->values[0][0] = 0;
     V2->world->values[1][0] = 4;
     V2->world->values[2][0] = 2;
@@ -69,10 +69,16 @@ void mathematicsTest() {
     target->verts[1] = targetV1;
     target->verts[2] = targetV2;
     
+    // Tarkistetaan, että toisen polygonin ensimmäinen verteksi on
+    // toisen etupuolella.
+    
+    assert(pointInFrontOfPolygon(origin, target->verts[0]->world));
+    assert(pointInFrontOfPolygon(target, origin->verts[0]->world));
+    
     // Tarkistetaan, että target on origin-polygonin edellä
     
-    assert(isInFrontOfPolygon(target, origin) == 1);
-    assert(isInFrontOfPolygon(origin, target) == 1);
+    assert(isInFrontOfPolygon(target, origin));
+    assert(isInFrontOfPolygon(origin, target));
     
     // Poistetaan luodut tietorakenteet
     
